@@ -1,0 +1,315 @@
+<template>
+  <div class="answer-page">
+    <div class="question-title">
+      {{ 'Q-' + parseInt(index + 1) + '：' + list[index].name }}
+    </div>
+    <div class="answer-list">
+      <div class="title">
+        请选择：
+      </div>
+      <div
+        class="answer-item"
+        :class="{
+        'is-right': needWait && 'optionA' === list[index].answer,
+        'is-error': needWait && 'optionA' !== list[index].answer
+        }"
+        @click="checkAnswer('optionA')"
+        v-if="list[index].optionA"
+      >
+        <img
+          src="@/static/challenge/error.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer !== list[index].answer && answer === 'optionA'">
+        <img
+          src="@/static/challenge/right.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer === list[index].answer && answer === 'optionA'"
+        >
+        {{ list[index].optionA }}
+      </div>
+      <div
+        class="answer-item"
+        :class="{
+        'is-right': needWait && 'optionB' === list[index].answer,
+        'is-error': needWait && 'optionB' !== list[index].answer
+        }"
+        @click="checkAnswer('optionB')"
+        v-if="list[index].optionB"
+      >
+        <img
+          src="@/static/challenge/error.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer !== list[index].answer && answer === 'optionB'">
+        <img
+          src="@/static/challenge/right.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer === list[index].answer && answer === 'optionB'"
+        >
+        {{ list[index].optionB }}
+      </div>
+      <div
+        class="answer-item"
+        :class="{
+        'is-right': needWait && 'optionC' === list[index].answer,
+        'is-error': needWait && 'optionC' !== list[index].answer
+        }"
+        @click="checkAnswer('optionC')"
+        v-if="list[index].optionC"
+      >
+        <img
+          src="@/static/challenge/error.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer !== list[index].answer && answer === 'optionC'">
+        <img
+          src="@/static/challenge/right.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer === list[index].answer && answer === 'optionC'"
+        >
+        {{ list[index].optionC }}
+      </div>
+      <div
+        class="answer-item"
+        :class="{
+        'is-right': needWait && 'optionD' === list[index].answer,
+        'is-error': needWait && 'optionD' !== list[index].answer
+        }"
+        @click="checkAnswer('optionD')"
+        v-if="list[index].optionD"
+      >
+        <img
+          src="@/static/challenge/error.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer !== list[index].answer && answer === 'optionD'">
+        <img
+          src="@/static/challenge/right.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer === list[index].answer && answer === 'optionD'"
+        >
+        {{ list[index].optionD }}
+      </div>
+      <div
+        class="answer-item"
+        :class="{
+        'is-right': needWait && 'optionOne' === list[index].answer,
+        'is-error': needWait && 'optionOne' !== list[index].answer
+        }"
+        @click="checkAnswer('optionOne')"
+        v-if="list[index].optionOne"
+      >
+        <img
+          src="@/static/challenge/error.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer !== list[index].answer && answer === 'optionOne'">
+        <img
+          src="@/static/challenge/right.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer === list[index].answer && answer === 'optionOne'"
+        >
+        {{ list[index].optionOne }}
+      </div>
+      <div
+        class="answer-item"
+        :class="{
+        'is-right': needWait && 'optionTwo' === list[index].answer,
+        'is-error': needWait && 'optionTwo' !== list[index].answer
+        }"
+        @click="checkAnswer('optionTwo')"
+        v-if="list[index].optionTwo"
+      >
+        <img
+          src="@/static/challenge/error.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer !== list[index].answer && answer === 'optionTwo'">
+        <img
+          src="@/static/challenge/right.png"
+          alt=""
+          class="answer-item-result"
+          v-if="needWait && answer === list[index].answer && answer === 'optionTwo'"
+        >
+        {{ list[index].optionTwo }}
+      </div>
+      <div class="error-tips" v-if="answer !== list[index].answer && needWait">
+        {{ list[index].errorTips ? list[index].errorTips : '' }}
+      </div>
+      <div
+        class="next-button"
+        v-if="index < 9 && needWait && list[index].answer === answer"
+        @click="changeQuestion"
+      >
+        下一题
+      </div>
+      <div
+        class="next-button"
+        v-if="answer !== list[index].answer && needWait"
+        @click="reChallenge"
+      >
+        重新挑战
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "answer",
+    data() {
+      return {
+        list: [],
+        index: 0,
+        needWait: false,
+        answer: false
+      }
+    },
+    mounted() {
+      this.getQuestionList()
+    },
+    methods: {
+      /**
+       * @description 获取问题列表
+       * @returns {Promise<void>}
+       */
+      async getQuestionList() {
+        uni.showLoading();
+        this.list = await this.$ajax.post("/api/question/list", {
+          pageSize: 10,
+          pageNo: 1
+        });
+        uni.hideLoading()
+      },
+      /**
+       * @description 检查选项是否就是答案
+       * @param answerData
+       */
+      checkAnswer(answerData) {
+        if (this.needWait) {
+          return
+        }
+        this.needWait = true;
+        this.answer = answerData;
+        // 答对并且已经是第十题的时候，更新分数
+        if (this.index === 9 && answerData === this.list[this.index].answer) {
+          this.submitScore();
+        }
+        // 如果答错，提交更新分数
+        if(answerData !== this.list[this.index].answer){
+          this.submitScore();
+        }
+      },
+      /**
+       * @description 答对切换问题
+       */
+      changeQuestion() {
+        this.needWait = false;
+        this.index++;
+        this.answer = null;
+      },
+      /**
+       * @description 答错重新挑战
+       */
+      reChallenge() {
+        this.index = 0;
+        this.answer = null;
+        this.needWait = false;
+        this.getQuestionList()
+      },
+      /**
+       * @description 答题完成提交分数
+       */
+      async submitScore() {
+        let userId = wx.getStorageSync("userId");
+        let result = await this.$ajax.post("/api/question/submit", {
+          userId: userId,
+          score: this.index * 10
+        });
+        if(result){
+          console.log("更新分数成功")
+
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="scss" scoped>
+  .answer-page {
+    background-color: #FFFFFF;
+    min-height: 100%;
+    padding: 40rpx 0 40rpx;
+
+    .question-title {
+      font-size: 30rpx;
+      color: #EE86AD;
+      line-height: 35rpx;
+      padding: 0 40rpx 40rpx;
+      border-bottom: 2rpx solid #E8E8E8;
+    }
+
+    .answer-list {
+      padding: 40rpx 40rpx 40rpx;
+
+      .title {
+        font-size: 28rpx;
+        font-weight: bold;
+        color: #333333;
+      }
+
+      .answer-item {
+        width: calc(100% - 80rpx);
+        padding: 0 20rpx 0 60rpx;
+        line-height: 70rpx;
+        border-radius: 30rpx 30rpx 30rpx;
+        margin: 40rpx auto;
+        background-color: #EE86AD;
+        color: #FFFFFF;
+        font-size: 24rpx;
+        text-align: left;
+        position: relative;
+
+        .answer-item-result {
+          width: 30rpx;
+          height: 30rpx;
+          position: absolute;
+          top: 20rpx;
+          left: 20rpx;
+        }
+
+        &.is-right {
+          background-color: #4cd964;
+        }
+
+        &.is-error {
+          background-color: #FF0000;
+        }
+      }
+
+      .error-tips {
+        font-size: 24rpx;
+        line-height: 30rpx;
+        color: #666666;
+      }
+
+      .next-button {
+        width: 670rpx;
+        height: 90rpx;
+        background: linear-gradient(94deg, rgba(238, 123, 166, 1), rgba(240, 149, 183, 1));
+        border-radius: 45rpx;
+        color: #FFFFFF;
+        font-size: 34rpx;
+        text-align: center;
+        line-height: 90rpx;
+        margin: 60rpx 0 40rpx;
+      }
+    }
+  }
+</style>

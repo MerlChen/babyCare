@@ -1,0 +1,93 @@
+{
+  "pages": [
+    {
+      "path": "pages/article/index",
+      "style": {
+        "navigationBarTitleText": "知识课堂"
+      }
+    },
+    {
+      "path": "pages/article/list",
+      "style": {
+        "navigationBarTitleText": "知识课堂-"
+      }
+    },
+    {
+      "path": "pages/article/details",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/challenge/index",
+      "style": {
+        "navigationBarTitleText": "问答挑战"
+      }
+    },
+    {
+      "path": "pages/challenge/question/index",
+      "style": {
+        "navigationBarTitleText": "育儿问答挑战"
+      }
+    },
+    {
+      "path": "pages/challenge/question/answer",
+      "style": {
+        "navigationBarTitleText": "育儿问答挑战"
+      }
+    },
+    {
+      "path": "pages/challenge/grade/index",
+      "style": {
+        "navigationBarTitleText": "排行榜"
+      }
+    },
+    {
+      "path": "pages/personal/index",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/personal/baby/index",
+      "style": {
+        "navigationBarTitleText": "我的宝宝"
+      }
+    },
+    {
+      "path": "pages/personal/baby/details",
+      "style": {
+        "navigationBarTitleText": "宝宝详情"
+      }
+    },
+    {
+      "path": "pages/personal/baby/add",
+      "style": {
+        "navigationBarTitleText": "添加宝宝信息"
+      }
+    },
+    {
+      "path": "pages/personal/tools/search",
+      "style": {
+        "navigationBarTitleText": "数据查询",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/personal/tools/change",
+      "style": {
+        "navigationBarTitleText": "微量元素单位转换"
+      }
+    },
+    {
+      "path": "pages/personal/growthTrack/index",
+      "style": {
+        "navigationBarTitleText": "成长轨迹"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTitleText": "育儿帮-专注育儿教育",
+    "navigationBarBackgroundColor": "#EE7BA6"
+  }
+}
