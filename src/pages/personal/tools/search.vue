@@ -20,19 +20,19 @@
             宝宝
           </div>
           <div class="uni-list-cell-db">
-            <piker
+            <picker
               @change="changeBaby"
               :value="id"
-              range-key="id"
+              range-key="name"
               :range="babyList"
             >
               <div class="uni-input">
                 {{ healthForm.babyInfo.name }}
               </div>
-            </piker>
+            </picker>
           </div>
         </div>
-        <div class="form-item">
+        <div class="form-item" v-if="healthForm.babyInfo.id === '1'">
           <div class="uni-list-cell-left">
             月龄
           </div>
@@ -47,7 +47,7 @@
             </picker>
           </div>
         </div>
-        <div class="form-item">
+        <div class="form-item" v-if="healthForm.babyInfo.id === '1'">
           <div class="uni-list-cell-left">
             性别
           </div>
@@ -230,223 +230,223 @@
 </template>
 
 <script>
-  let vm;
-  export default {
-    name: "index",
-    data() {
-      return {
-        healthForm: {
+let vm;
+export default {
+  name: "index",
+  data() {
+    return {
+      healthForm: {
+        age: {},
+        sex: {},
+        babyInfo: {},
+        weight: "",
+        height: ""
+      },
+      babyList: [],
+      ageList: [],
+      sexList: [],
+      tableData: [
+        {
+          minusThree: 0,
+          minusTwo: 0,
+          minusOne: 0,
+          normal: 0,
+          plusOne: 0,
+          plusTwo: 0,
+          plusThree: 0
+        },
+        {
+          minusThree: 0,
+          minusTwo: 0,
+          minusOne: 0,
+          normal: 0,
+          plusOne: 0,
+          plusTwo: 0,
+          plusThree: 0
+        }
+      ]
+    };
+  },
+  methods: {
+    /**
+     * @description 数据清空
+     * @fullClear 全部清空
+     */
+    clearDataInfo(fullClear) {
+      this.tableData = [
+        {
+          minusThree: 0,
+          minusTwo: 0,
+          minusOne: 0,
+          normal: 0,
+          plusOne: 0,
+          plusTwo: 0,
+          plusThree: 0
+        },
+        {
+          minusThree: 0,
+          minusTwo: 0,
+          minusOne: 0,
+          normal: 0,
+          plusOne: 0,
+          plusTwo: 0,
+          plusThree: 0
+        }
+      ];
+      if (fullClear) {
+        this.healthForm = {
           age: {},
-          sex: {},
           babyInfo: {
-            id: "1",
-            name: "请选择宝宝"
+            id:"1",
+            name:"请选择宝宝"
           },
+          sex: {},
           weight: "",
           height: ""
-        },
-        babyList: [],
-        ageList: [],
-        sexList: [],
-        tableData: [
-          {
-            minusThree: 0,
-            minusTwo: 0,
-            minusOne: 0,
-            normal: 0,
-            plusOne: 0,
-            plusTwo: 0,
-            plusThree: 0
-          },
-          {
-            minusThree: 0,
-            minusTwo: 0,
-            minusOne: 0,
-            normal: 0,
-            plusOne: 0,
-            plusTwo: 0,
-            plusThree: 0
-          }
-        ]
-      };
-    },
-    methods: {
-      /**
-       * @description 数据清空
-       * @fullClear 全部清空
-       */
-      clearDataInfo(fullClear) {
-        this.tableData = [
-          {
-            minusThree: 0,
-            minusTwo: 0,
-            minusOne: 0,
-            normal: 0,
-            plusOne: 0,
-            plusTwo: 0,
-            plusThree: 0
-          },
-          {
-            minusThree: 0,
-            minusTwo: 0,
-            minusOne: 0,
-            normal: 0,
-            plusOne: 0,
-            plusTwo: 0,
-            plusThree: 0
-          }
-        ];
-        if (fullClear) {
-          this.healthForm = {
-            age: {},
-            sex: {},
-            weight: "",
-            height: ""
-          };
-          this.setAgeList();
-          this.setSexList();
-        }
-      },
-      /**
-       * @description 查询结果
-       */
-      async queryResult() {
-        let _this = this;
-        _this.clearDataInfo();
-        let result = await _this.$ajax.post("/api/getHealthInfo", {
-          sex: _this.healthForm.sex.id,
-          age: _this.healthForm.age.id,
-          height: _this.healthForm.height,
-          weight: _this.healthForm.weight
-        });
-        if (result) {
-          _this.tableData = result || [];
-          wx.showToast({
-            title: "查询成功",
-            type: "success"
-          });
-        }
-      },
-      /**
-       * @description 设置年龄列表
-       */
-      setAgeList() {
-        for (let i = 0; i < 82; i++) {
-          if (i <= 12) {
-            this.ageList.push({
-              id: i,
-              name: i + "个月"
-            });
-          }
-          if (i > 12 && (i - 12) % 3 === 0) {
-            this.ageList.push({
-              id: i,
-              name:
-                i + "个月（" + (i % 12) === 0
-                  ? parseInt(i / 12) + "岁）"
-                  : i +
-                  "个月（" +
-                  parseInt(i / 12) +
-                  "岁零" +
-                  (i - parseInt(i / 12) * 12) +
-                  "月）"
-            });
-          }
-        }
-        this.healthForm.age = this.ageList[0];
-      },
-      /**
-       * @description 设置性别列表
-       */
-      setSexList() {
-        this.sexList = [
-          {
-            id: "1",
-            name: "男"
-          },
-          {
-            id: "2",
-            name: "女"
-          }
-        ];
-        this.healthForm.sex = this.sexList[0];
-      },
-      /**
-       * @description 更改年龄
-       */
-      changeAge(res) {
-        this.healthForm.age = this.ageList[res.target.value];
-      },
-      /**
-       * @description 更改性别
-       */
-      changeSex(res) {
-        this.healthForm.sex = this.sexList[res.target.value];
-      },
-      /**
-       * @description 更改身高
-       */
-      changeHeight(res) {
-        this.healthForm.height = res.target.value;
-      },
-      /**
-       * @description 更改体重
-       */
-      changeWeight(res) {
-        this.healthForm.weight = res.target.value;
-      },
-      /**
-       * @description 获取宝宝列表
-       */
-      async getBabyList() {
-        this.babyList.push({
-          id: "1",
-          name: "请选择宝宝"
-        });
-        let list = await this.$ajax.post("/api/baby/getBabyList", {
-          userId: wx.getStorageSync("userId")
-        });
-        if(list && list.length > 0){
-          list.map(item=>{
-            this.babyList.push(item);
-          })
-        }
-        console.log(this.babyList)
-      },
-      /**
-       * @description 更改选中的宝宝
-       * @param res 宝宝信息
-       */
-      changeBaby(res){
-        this.healthForm.babyInfo = this.babyList[res.detail.value];
+        };
+        this.setAgeList();
+        this.setSexList();
       }
     },
-    mounted() {
-      vm = this;
-      this.getBabyList();
-      this.clearDataInfo(true);
-      wx.showShareMenu({
-        withShareTicket: true
+    /**
+     * @description 查询结果
+     */
+    async queryResult() {
+      let _this = this;
+      _this.clearDataInfo();
+      let result = await _this.$ajax.post("/api/getHealthInfo", {
+        sex: _this.healthForm.sex.id,
+        age: _this.healthForm.age.id,
+        height: _this.healthForm.height,
+        weight: _this.healthForm.weight
       });
+      if (result) {
+        _this.tableData = result || [];
+        wx.showToast({
+          title: "查询成功",
+          type: "success"
+        });
+      }
     },
     /**
-     * @description 分享信息设置
+     * @description 设置年龄列表
      */
-    onShareAppMessage() {
-      return {
-        title: "优速查-快速查询、统计孩子的身高、体重",
-        url: "/pages/article/index",
-        desc: "查询并统计孩子的身高、体重发育趋势",
-        imageUrl: "/static/pic.png"
-      };
+    setAgeList() {
+      for (let i = 0; i < 82; i++) {
+        if (i <= 12) {
+          this.ageList.push({
+            id: i,
+            name: i + "个月"
+          });
+        }
+        if (i > 12 && (i - 12) % 3 === 0) {
+          this.ageList.push({
+            id: i,
+            name:
+              i + "个月（" + (i % 12) === 0
+                ? parseInt(i / 12) + "岁）"
+                : i +
+                "个月（" +
+                parseInt(i / 12) +
+                "岁零" +
+                (i - parseInt(i / 12) * 12) +
+                "月）"
+          });
+        }
+      }
+      this.healthForm.age = this.ageList[0];
     },
-    onPullDownRefresh() {
-      setTimeout(function () {
-        uni.stopPullDownRefresh();
-        vm.clearDataInfo(true);
-      }, 1000);
+    /**
+     * @description 设置性别列表
+     */
+    setSexList() {
+      this.sexList = [
+        {
+          id: "1",
+          name: "男"
+        },
+        {
+          id: "2",
+          name: "女"
+        }
+      ];
+      this.healthForm.sex = this.sexList[0];
+    },
+    /**
+     * @description 更改年龄
+     */
+    changeAge(res) {
+      this.healthForm.age = this.ageList[res.target.value];
+    },
+    /**
+     * @description 更改性别
+     */
+    changeSex(res) {
+      this.healthForm.sex = this.sexList[res.target.value];
+    },
+    /**
+     * @description 更改身高
+     */
+    changeHeight(res) {
+      this.healthForm.height = res.target.value;
+    },
+    /**
+     * @description 更改体重
+     */
+    changeWeight(res) {
+      this.healthForm.weight = res.target.value;
+    },
+    /**
+     * @description 获取宝宝列表
+     */
+    async getBabyList() {
+      this.babyList.push({
+        id: "1",
+        name: "请选择宝宝"
+      });
+      let list = await this.$ajax.post("/api/baby/getBabyList", {
+        userId: wx.getStorageSync("userId")
+      });
+      if (list && list.length > 0) {
+        list.map(item => {
+          this.babyList.push(item);
+        })
+      }
+    },
+    /**
+     * @description 更改选中的宝宝
+     * @param res 宝宝信息
+     */
+    changeBaby(res) {
+      this.healthForm.babyInfo = this.babyList[res.detail.value];
     }
-  };
+  },
+  mounted() {
+    vm = this;
+    this.getBabyList();
+    this.clearDataInfo(true);
+    wx.showShareMenu({
+      withShareTicket: true
+    });
+  },
+  /**
+   * @description 分享信息设置
+   */
+  onShareAppMessage() {
+    return {
+      title: "优速查-快速查询、统计孩子的身高、体重",
+      url: "/pages/article/index",
+      desc: "查询并统计孩子的身高、体重发育趋势",
+      imageUrl: "/static/pic.png"
+    };
+  },
+  onPullDownRefresh() {
+    setTimeout(function () {
+      uni.stopPullDownRefresh();
+      vm.clearDataInfo(true);
+    }, 1000);
+  }
+};
 </script>
 
 <style lang="scss">

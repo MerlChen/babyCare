@@ -10,17 +10,17 @@
             {{ levelCount(userInfo.score) }}
           </div>
           <div class="current-level-target">
-            {{ levelCount(userInfo.score) }}
+            {{ nextLevelCount(userInfo.score) }}
           </div>
         </div>
         <div class="current-info-score">
           {{ '当前积分：' + userInfo.score }}
         </div>
         <div class="current-info-progress">
-          <div class="current-info-percent" :style="{'width': levelPercent +'%' }"></div>
+          <div class="current-info-percent" :style="{'width': levelPercentCount(userInfo.score) +'%' }"></div>
         </div>
         <div class="current-info-progress-label">
-          {{ levelPercent + '%' }}
+          {{ levelPercentCount(userInfo.score) + '%' }}
         </div>
       </div>
     </div>
@@ -60,39 +60,42 @@
 </template>
 
 <script>
-  import {levelCount} from "../../../tools/dataFormat";
+import {levelCount, nextLevelCount,levelPercentCount} from "../../../tools/dataFormat";
 
-  export default {
-    name: "index",
-    data() {
-      return {
-        userInfo: {},
-        levelPercent: '50'
-      }
+export default {
+  name: "index",
+  data() {
+    return {
+      userInfo: {}
+    }
+  },
+  mounted() {
+    this.getUserInfo()
+  },
+  methods: {
+    // 等级计算
+    levelCount,
+    // 下一等级计算
+    nextLevelCount,
+    // 等级进度条
+    levelPercentCount,
+    /**
+     * @description 获取用户信息
+     */
+    async getUserInfo() {
+      let userId = wx.getStorageSync("userId");
+      this.userInfo = await this.$ajax.post("/api/user/getUserInfo", {
+        userId: userId
+      });
     },
-    mounted() {
-      this.getUserInfo()
-    },
-    methods: {
-      // 等级计算
-      levelCount,
-      /**
-       * @description 获取用户信息
-       */
-      async getUserInfo() {
-        let userId = wx.getStorageSync("userId");
-        this.userInfo = await this.$ajax.post("/api/user/getUserInfo", {
-          userId: userId
-        });
-      },
-      /**
-       * @description 开始挑战
-       */
-      beginChallenge() {
-        uni.navigateTo({ url: '/pages/challenge/question/answer' });
-      }
+    /**
+     * @description 开始挑战
+     */
+    beginChallenge() {
+      uni.navigateTo({url: '/pages/challenge/question/answer'});
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
