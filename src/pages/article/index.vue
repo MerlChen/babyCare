@@ -287,6 +287,7 @@ export default {
       width: calc(100% - 30rpx);
       background-color: #FBE4EF;
       position: relative;
+      display: none;
       padding: 15rpx 15rpx;
 
       input {
@@ -382,20 +383,23 @@ export default {
           padding: 25rpx 20rpx;
           display: flex;
           justify-content: space-between;
-          color: #666666;
+          color: #333333;
+          font-weight: bold;
+          text-shadow: 2rpx 2rpx 2rpx #FFFFFF;
         }
 
         .daily-item-main {
           width: 100%;
           height: 320rpx;
-          -webkit-border-radius: 0 0 4px 4px;
-          -moz-border-radius: 0 0 4px 4px;
-          border-radius: 0 0 4px 4px;
+          -webkit-border-radius: 0 0 4rpx 4rpx;
+          -moz-border-radius: 0 0 4rpx 4rpx;
+          border-radius: 0 0 4rpx 4rpx;
         }
 
         .daily-item-title {
-          color: #333333;
+          color: #FFFFFF;
           font-size: 32rpx;
+          text-shadow: 2rpx 2rpx 2rpx #000000;
           line-height: 36rpx;
           position: absolute;
           top: 100rpx;

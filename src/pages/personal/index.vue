@@ -96,12 +96,6 @@ export default {
           name: "微量元素单位转换",
           iconPath: "./../../static/personal/tools.png",
           pageInfo: "/pages/personal/tools/change"
-        },
-        {
-          id: "growthTrack",
-          name: "成长轨迹",
-          iconPath: "./../../static/personal/growth.png",
-          pageInfo: "/pages/personal/growthTrack/index"
         }
       ]
     };

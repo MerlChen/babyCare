@@ -227,14 +227,14 @@ export default {
     .tools-change-item {
       display: flex;
       padding: 0 30rpx;
-      line-height: 100rpx;
+      line-height: 120rpx;
       justify-content: flex-start;
       border-bottom: 2rpx solid #c8c7cc;
 
       .container {
         .input-container {
-          height: 100rpx;
-          line-height: 100rpx;
+          height: 120rpx;
+          line-height: 120rpx;
 
           &::placeholder {
             color: #ffffff;

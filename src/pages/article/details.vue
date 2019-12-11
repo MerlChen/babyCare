@@ -31,6 +31,7 @@ export default {
       let result = await this.$ajax.post("/api/article/details", articleInfo)
       let d = new Date(result.createTime);
       result.createTime = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+      result.content = result.content.replace(/\<img/gi,"<img class='content-img'")
       this.dataInfo = result;
       uni.setNavigationBarTitle({
         title: result.title
@@ -69,8 +70,13 @@ export default {
     }
 
     .article-content {
+      width: 710rpx;
       padding-bottom: 20rpx;
       color: #333333;
+
+      .content-img {
+        width: 100% !important;
+      }
     }
   }
 </style>
