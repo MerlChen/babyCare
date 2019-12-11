@@ -105,9 +105,51 @@ function ageDiffCount(birthDay) {
   return result
 }
 
+/**
+ * @description 月龄匹配
+ * @param ageArr
+ * @param birthDay
+ * @return {*|number}
+ */
+function bestAgeMatch(ageArr, birthDay) {
+  const b = new Date(birthDay).getTime();
+  const d = new Date().getTime();
+  let diff = (d - b) / 24 / 60 / 60 / 1000;
+  let monthNum = 0;
+  // 如果未满月,并且出生日少于15天，按照0个月进行计算
+  if (diff < 15) {
+    monthNum = 0;
+  }
+  // 如果未满月，并且出生日大于15天，按照一个月进行计算
+  else if (diff < 30) {
+    monthNum = 1;
+  }
+  // 如果超过一个月，进行最佳月龄匹配
+  else {
+    let flag = false;
+    let nextNum = 0;
+    let prevIndex = 0;
+    ageArr.map((item, index) => {
+      if (item.id * 30 > diff && !flag) {
+        flag = true;
+        prevIndex = index - 1;
+        nextNum = item.id;
+      }
+    })
+    let diffDay = (diff - ageArr[prevIndex].id * 30) / (nextNum * 30 - ageArr[prevIndex].id * 30);
+    if (diffDay > 0.5) {
+      monthNum = nextNum;
+    } else {
+      monthNum = ageArr[prevIndex].id;
+    }
+  }
+  return monthNum
+}
+
 export {
   levelCount,
   nextLevelCount,
   levelPercentCount,
-  ageDiffCount
+  ageDiffCount,
+  bestAgeMatch
 }

@@ -231,6 +231,8 @@
 
 <script>
 let vm;
+import {bestAgeMatch} from "../../../tools/dataFormat"
+
 export default {
   name: "index",
   data() {
@@ -297,8 +299,8 @@ export default {
         this.healthForm = {
           age: {},
           babyInfo: {
-            id:"1",
-            name:"请选择宝宝"
+            id: "1",
+            name: "请选择宝宝"
           },
           sex: {},
           weight: "",
@@ -306,26 +308,6 @@ export default {
         };
         this.setAgeList();
         this.setSexList();
-      }
-    },
-    /**
-     * @description 查询结果
-     */
-    async queryResult() {
-      let _this = this;
-      _this.clearDataInfo();
-      let result = await _this.$ajax.post("/api/getHealthInfo", {
-        sex: _this.healthForm.sex.id,
-        age: _this.healthForm.age.id,
-        height: _this.healthForm.height,
-        weight: _this.healthForm.weight
-      });
-      if (result) {
-        _this.tableData = result || [];
-        wx.showToast({
-          title: "查询成功",
-          type: "success"
-        });
       }
     },
     /**
@@ -419,7 +401,36 @@ export default {
      */
     changeBaby(res) {
       this.healthForm.babyInfo = this.babyList[res.detail.value];
-    }
+      if (this.healthForm.babyInfo.id === '1') {
+        this.healthForm.age = this.ageList[0]
+        this.healthForm.sex = this.sexList[0]
+      } else {
+        this.healthForm.age.id = bestAgeMatch(this.ageList, this.healthForm.babyInfo.birthDay);
+        this.healthForm.sex.id = this.healthForm.babyInfo.sex;
+      }
+    },
+    /**
+     * @description 查询结果
+     */
+    async queryResult() {
+      let _this = this;
+      _this.clearDataInfo();
+      let result = await _this.$ajax.post("/api/getHealthInfo", {
+        sex: _this.healthForm.sex.id,
+        age: _this.healthForm.age.id,
+        userId: wx.getStorageSync("userId"),
+        babyId: _this.healthForm.babyInfo.id !== '1' ? _this.healthForm.babyInfo.id : "",
+        height: _this.healthForm.height,
+        weight: _this.healthForm.weight
+      });
+      if (result) {
+        _this.tableData = result || [];
+        wx.showToast({
+          title: "查询成功",
+          type: "success"
+        });
+      }
+    },
   },
   mounted() {
     vm = this;
