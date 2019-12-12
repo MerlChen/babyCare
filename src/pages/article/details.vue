@@ -60,7 +60,7 @@ export default {
         userId: wx.getStorageSync("userId")
       })
       let d = new Date(result.createTime);
-      this.favorite = result.favorited;
+      this.favorite = result.favorite;
       result.createTime = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
       result.content = result.content.replace(/\<img/gi, "<img class='content-img'")
       this.dataInfo = result;
@@ -81,6 +81,8 @@ export default {
       let result = await this.$ajax.post("/api/favorite/add", {
         articleId: this.dataInfo.id,
         articleName: this.dataInfo.title,
+        description: this.dataInfo.description,
+        thumb: this.dataInfo.thumb,
         userId: wx.getStorageSync("userId")
       })
       if (result) {
@@ -114,6 +116,16 @@ export default {
       uni.stopPullDownRefresh();
       this.getArticleDetails(true);
     }, 1000);
+  },
+  /**
+   * @description 分享信息设置
+   */
+  onShareAppMessage() {
+    return {
+      title: this.dataInfo.title,
+      url: "/pages/article/details?id=" + this.dataInfo.id,
+      imageUrl: this.dataInfo.thumb
+    };
   }
 }
 </script>

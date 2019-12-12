@@ -259,6 +259,16 @@ export default {
     filterArticle() {
       console.log("搜索");
     }
+  },
+  /**
+   * @description 分享信息设置
+   */
+  onShareAppMessage() {
+    return {
+      title: "育儿帮-专注育儿知识传授",
+      url: "/pages/article/index",
+      imageUrl: "/static/pic.png"
+    };
   }
 };
 </script>
