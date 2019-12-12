@@ -552,8 +552,15 @@ export default {
     .query {
       background-color: #ffffff;
       color: #ee7ba6;
-      margin: 100rpx 20rpx 80rpx;
-      width: calc(100% - 40rpx);
+      width: 690rpx;
+      padding: 30rpx 0;
+      font-size: 34rpx;
+      line-height: 34rpx;
+      text-align: center;
+      -webkit-border-radius: 45rpx;
+      -moz-border-radius: 45rpx;
+      border-radius: 45rpx;
+      margin: 100rpx 30rpx 80rpx;
     }
 
     .active {

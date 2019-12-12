@@ -36,8 +36,8 @@
       </div>
     </div>
     <div class="btn-area">
-      <button class="btn-delete btn" hover-class="active" @click="deleteBabyInfo">删除</button>
-      <button class="btn-update btn" hover-class="active" @click="updateBabyInfo">保存</button>
+      <div class="btn-delete btn" hover-class="active" @click="deleteBabyInfo">删除</div>
+      <div class="btn-update btn" hover-class="active" @click="updateBabyInfo">保存</div>
     </div>
   </div>
 </template>
@@ -93,7 +93,7 @@ export default {
           duration: 2000
         });
         setTimeout(() => {
-          uni.navigateTo({url: "/pages/personal/baby/index"})
+          uni.reLaunch({url: "/pages/personal/baby/index"})
         }, 2000)
       }
     },
@@ -108,7 +108,7 @@ export default {
           duration: 2000
         });
         setTimeout(() => {
-          uni.navigateTo({url: "/pages/personal/baby/index"})
+          uni.reLaunch({url: "/pages/personal/baby/index"})
         }, 2000)
       }
     }
@@ -155,28 +155,29 @@ export default {
       left: 0;
       bottom: 50rpx;
       width: 100%;
-      display: flex;
-      justify-content: flex-start;
       -webkit-border-radius: 8rpx 8rpx 8rpx;
       -moz-border-radius: 8rpx 8rpx 8rpx;
       border-radius: 8rpx 8rpx 8rpx;
 
       .btn {
-        width: 50%;
+        left: 30rpx;
+        bottom: 40rpx;
+        width: 690rpx;
+        color: #ee7ba6;
+        padding: 30rpx 0;
+        font-size: 34rpx;
+        line-height: 34rpx;
+        position: absolute;
         text-align: center;
-        -webkit-border-radius: none;
-        -moz-border-radius: none;
-        border-radius: none;
-        border: none;
-
-        &.btn-delete {
-          color: #333333;
-          background-color: #E8ECF2;
-        }
-
+        background-color: #ffffff;
+        border: 1rpx solid #ee7ba6;
+        -webkit-border-radius: 45rpx;
+        -moz-border-radius: 45rpx;
+        border-radius: 45rpx;
         &.btn-update {
+          bottom: 160rpx;
+          background-color: #ee7ba6;
           color: #ffffff;
-          background-color: #EE7BA6;
         }
       }
     }

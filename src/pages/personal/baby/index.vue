@@ -34,11 +34,11 @@
       </div>
     </div>
     <div
-      class="my-baby-item is-add"
+      class="add-btn"
       @click="addBabyInfo"
       hover-class="button-hover"
     >
-      + 添加数据
+      添加
     </div>
   </div>
 </template>
@@ -71,13 +71,13 @@ export default {
      * @param babyData
      */
     getBabyInfo(babyData) {
-      uni.navigateTo({url: "/pages/personal/baby/details?id=" + babyData.id})
+      uni.reLaunch({url: "/pages/personal/baby/details?id=" + babyData.id})
     },
     /**
      * @description 添加宝宝数据
      */
     addBabyInfo() {
-      uni.navigateTo({url: "/pages/personal/baby/add"})
+      uni.reLaunch({url: "/pages/personal/baby/add"})
     }
   }
 }
@@ -87,6 +87,8 @@ export default {
   .my-baby-page {
     min-height: 100%;
     background-color: #ffffff;
+    position: relative;
+
     .my-baby-item {
       width: calc(100% - 60rpx);
       padding: 30rpx 30rpx 30rpx;
@@ -139,17 +141,31 @@ export default {
         font-size: 28rpx;
         font-weight: 600;
       }
+    }
 
-      &.is-add {
-        justify-content: center;
-      }
+    .add-btn {
+      left: 30rpx;
+      bottom: 40rpx;
+      width: 690rpx;
+      color: #ffffff;
+      padding: 30rpx 0;
+      font-size: 34rpx;
+      line-height: 34rpx;
+      position: absolute;
+      text-align: center;
+      background-color: #ee7ba6;
+      -webkit-border-radius: 45rpx;
+      -moz-border-radius: 45rpx;
+      border-radius: 45rpx;
     }
 
     .button-hover {
       background-color: #E8E8E8;
       color: #ffffff;
     }
-    .hover-item{
+
+    .hover-item {
+      color: #333333;
       background-color: #E8E8E8;
     }
   }

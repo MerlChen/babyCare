@@ -93,7 +93,7 @@ export default {
           duration: 2000
         })
         setTimeout(() => {
-          uni.navigateTo({url: "/pages/personal/baby/index"})
+          uni.redirectTo({url: "/pages/personal/baby/index"})
         }, 2000)
       }
     },
@@ -136,12 +136,19 @@ export default {
     }
 
     .btn-finished {
-      position: absolute;
       left: 30rpx;
-      bottom: 50rpx;
-      width: calc(100% - 60rpx);
-      background-color: #EE7BA6;
+      bottom: 40rpx;
+      width: 690rpx;
       color: #ffffff;
+      padding: 30rpx 0;
+      font-size: 34rpx;
+      line-height: 34rpx;
+      position: absolute;
+      text-align: center;
+      background-color: #ee7ba6;
+      -webkit-border-radius: 45rpx;
+      -moz-border-radius: 45rpx;
+      border-radius: 45rpx;
     }
 
     .active {
