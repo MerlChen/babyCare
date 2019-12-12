@@ -232,10 +232,6 @@
           userId: userId,
           score: this.index * 10
         });
-        if(result){
-          console.log("更新分数成功")
-
-        }
       }
     }
   }

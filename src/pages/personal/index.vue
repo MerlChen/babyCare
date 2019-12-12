@@ -113,13 +113,7 @@ export default {
   onShareAppMessage: function () {
     return {
       title: "我正在“育儿帮”学习专业的育儿知识",
-      path: "/pages/article/index",
-      success: res => {
-        console.log(res);
-      },
-      error: err => {
-        console.log(err);
-      }
+      path: "/pages/article/index"
     };
   },
   methods: {

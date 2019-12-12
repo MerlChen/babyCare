@@ -123,7 +123,7 @@ export default {
   onShareAppMessage() {
     return {
       title: this.dataInfo.title,
-      url: "/pages/article/details?id=" + this.dataInfo.id,
+      path: "/pages/article/details?id=" + this.dataInfo.id,
       imageUrl: this.dataInfo.thumb
     };
   }

@@ -24,8 +24,7 @@ export default {
   name: "favorite",
   data() {
     return {
-      list: [],
-      userInfo: {}
+      list: []
     }
   },
   methods: {
@@ -33,10 +32,10 @@ export default {
      * @description 读取我的收藏列表
      * @return {Promise<void>}
      */
-    async getFavoriteList() {
+    async getFavoriteList(params) {
       this.list = await this.$ajax.post("/api/favorite/list", {
-        userId: wx.getStorageSync("userId")
-      })
+        userId: params.userId
+      });
     },
     /**
      * @description 查看文章详情
@@ -46,30 +45,14 @@ export default {
       uni.navigateTo({
         url: "/pages/article/details?id=" + itemData.articleId
       });
-    },
-    /**
-     * @description 获取用户信息
-     */
-    async getUserInfo() {
-      this.userInfo = await this.$ajax.post("/api/user/getUserInfo", {
-        userId: wx.getStorageSync("userId")
-      })
     }
   },
-  mounted() {
-    this.getFavoriteList()
-    this.getUserInfo();
+  onLoad: function (options) {
+    uni.setNavigationBarTitle({
+      title: options.userName + '的收藏列表'
+    })
+    this.getFavoriteList(options)
   },
-  /**
-   * @description 分享信息设置
-   */
-  onShareAppMessage() {
-    return {
-      title: this.userInfo.nickName + '的收藏列表',
-      path: "/pages/personal/favorite/list?userId=" + wx.getStorageSync("userId") + '&userName=' + this.userInfo.nickName,
-      imageUrl: "/static/pic"
-    };
-  }
 }
 </script>
 
