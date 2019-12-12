@@ -373,8 +373,8 @@ export default {
         margin-bottom: 15rpx;
         width: 100%;
         border: 2rpx solid rgba(232, 232, 232, 1);
-        box-shadow: 0rpx 4rpx 6rpx 0rpx rgba(0, 0, 0, 0.1);
-        border-radius: 10rpx 10rpx 4rpx 4rpx;
+        box-shadow: 0rpx 8rpx 10rpx 0rpx rgba(0, 0, 0, 0.1);
+        border-radius: 10rpx 10rpx 10rpx 10rpx;
         position: relative;
         height: 408rpx;
 
@@ -391,9 +391,7 @@ export default {
         .daily-item-main {
           width: 100%;
           height: 320rpx;
-          -webkit-border-radius: 0 0 4rpx 4rpx;
-          -moz-border-radius: 0 0 4rpx 4rpx;
-          border-radius: 0 0 4rpx 4rpx;
+          border-radius: 0 0 10rpx 10rpx;
         }
 
         .daily-item-title {

@@ -18,21 +18,22 @@
           {{ dataInfo.viewsNum }}
         </div>
       </div>
-      <div class="article-like-item">
+      <div
+        class="article-like-item"
+        @click="favoriteEvent"
+      >
         <img
           src="./../../static/article/favorite.png"
           alt=""
-          v-if="!favorited"
-          @click="favoriteArticle"
+          v-if="!favorite"
         >
         <img
           src="./../../static/article/favorited.png"
-          v-if="favorited"
+          v-if="favorite"
           alt=""
-          @click="cancelFavorite"
         >
         <div class="label">
-          {{ favorited ? '取消收藏' : '收藏本文' }}
+          {{ favorite ? '取消收藏' : '收藏本文' }}
         </div>
       </div>
     </div>
@@ -40,52 +41,81 @@
 </template>
 
 <script>
-  export default {
-    name: "details",
-    data() {
-      return {
-        dataInfo: {},
-        favorited: false
-      }
-    },
-    methods: {
-      /**
-       * @description 根据文章ID获取文章详情
-       * @param articleInfo
-       */
-      async getArticleDetails(articleInfo) {
-        let result = await this.$ajax.post("/api/article/details", articleInfo)
-        let d = new Date(result.createTime);
-        result.createTime = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
-        result.content = result.content.replace(/\<img/gi, "<img class='content-img'")
-        this.dataInfo = result;
-        uni.setNavigationBarTitle({
-          title: result.title
-        })
-      },
-      /**
-       * @description 收藏该文章
-       */
-      favoriteArticle() {
-        this.favorited = true;
-      },
-      /**
-       * @description 取消收藏
-       */
-      cancelFavorite() {
-        this.favorited = false;
-      }
-    },
-    onLoad: function (options) {
-      this.getArticleDetails(options)
-    },
-    onPullDownRefresh() {
-      setTimeout(() => {
-        uni.stopPullDownRefresh();
-        this.getArticleDetails(true);
-      }, 1000);
+export default {
+  name: "details",
+  data() {
+    return {
+      dataInfo: {},
+      favorite: false
     }
+  },
+  methods: {
+    /**
+     * @description 根据文章ID获取文章详情
+     * @param articleInfo
+     */
+    async getArticleDetails(articleInfo) {
+      let result = await this.$ajax.post("/api/article/details", {
+        id: articleInfo.id,
+        userId: wx.getStorageSync("userId")
+      })
+      let d = new Date(result.createTime);
+      this.favorite = result.favorited;
+      result.createTime = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+      result.content = result.content.replace(/\<img/gi, "<img class='content-img'")
+      this.dataInfo = result;
+      uni.setNavigationBarTitle({
+        title: result.title
+      })
+    },
+    /**
+     * @description 触发收藏相关事件
+     */
+    favoriteEvent() {
+      this.favorite ? this.cancelFavorite() : this.favoriteArticle()
+    },
+    /**
+     * @description 收藏该文章
+     */
+    async favoriteArticle() {
+      let result = await this.$ajax.post("/api/favorite/add", {
+        articleId: this.dataInfo.id,
+        articleName: this.dataInfo.title,
+        userId: wx.getStorageSync("userId")
+      })
+      if (result) {
+        wx.showToast({
+          title: "收藏本文成功"
+        })
+        this.favorite = true;
+      }
+    },
+    /**
+     * @description 取消收藏
+     */
+    async cancelFavorite() {
+      let result = await this.$ajax.post("/api/favorite/delete", {
+        articleId: this.dataInfo.id,
+        userId: wx.getStorageSync("userId")
+      })
+      if (result) {
+        wx.showToast({
+          title: "取消收藏成功"
+        })
+        this.favorite = false;
+      }
+    }
+  },
+  onLoad: function (options) {
+    this.getArticleDetails(options)
+  },
+  onPullDownRefresh() {
+    setTimeout(() => {
+      uni.stopPullDownRefresh();
+      this.getArticleDetails(true);
+    }, 1000);
   }
+}
 </script>
 
 <style lang="scss">
@@ -121,15 +151,18 @@
       padding: 40rpx 40rpx 40rpx;
       display: flex;
       justify-content: space-between;
-      .article-like-item{
+
+      .article-like-item {
         display: flex;
         justify-content: flex-start;
-        .label{
+
+        .label {
           font-size: 28rpx;
           line-height: 46rpx;
         }
       }
-      img{
+
+      img {
         width: 46rpx;
         height: 46rpx;
         margin-right: 10rpx;
