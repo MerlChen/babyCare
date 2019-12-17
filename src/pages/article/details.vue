@@ -148,14 +148,14 @@ export default {
      * @description 获取评论列表
      */
     async getCommentList() {
-      this.commentList = await this.$ajax.post("/api/article/getCommentList",{
+      this.commentList = await this.$ajax.post("/api/article/getCommentList", {
         id: this.dataInfo.id
       })
     },
     /**
      * @description 写留言
      */
-    writeMessage(){
+    writeMessage() {
 
     }
   },
@@ -237,26 +237,28 @@ export default {
     .article-comment {
       margin-top: 20rpx;
       background-color: #ffffff;
-      padding: 30rpx 20rpx 20rpx;
+      padding: 0rpx 20rpx;
 
       .article-comment-title {
         display: flex;
-        padding: 0 20rpx 30rpx;
+        padding: 30rpx 20rpx 30rpx;
         justify-content: space-between;
         font-size: 30rpx;
         line-height: 40rpx;
-        margin-bottom: 10rpx;
         color: #666666;
-        .title{
+
+        .title {
           display: flex;
           justify-content: flex-start;
-          img{
+
+          img {
             width: 40rpx;
             height: 40rpx;
             margin-right: 10rpx;
           }
         }
-        .btn{
+
+        .btn {
           color: #007aff;
         }
       }
