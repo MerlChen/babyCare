@@ -55,8 +55,10 @@ export default {
   onLoad: function (params) {
     this.articleInfo.articleName = params.articleName;
     this.articleInfo.articleId = params.articleId;
+    let userInfo = JSON.parse(wx.getStorageSync("userInfo"))
     this.articleInfo.userId = wx.getStorageSync("userId")
-    this.articleInfo.nickName = wx.getStorageSync("nickName")
+    this.articleInfo.nickName = userInfo.nickName;
+    this.articleInfo.avatarUrl = userInfo.avatarUrl;
   }
 }
 </script>

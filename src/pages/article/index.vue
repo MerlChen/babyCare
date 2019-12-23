@@ -175,7 +175,7 @@ export default {
             .then(result => {
               if (result) {
                 wx.setStorageSync("userId", result.userId);
-                wx.setStorageSync("nickName", result.nickName);
+                wx.setStorageSync("userInfo",JSON.stringify(result))
               }
             });
         }
