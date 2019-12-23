@@ -148,7 +148,7 @@ export default {
      * @description 获取评论列表
      */
     async getCommentList() {
-      this.commentList = await this.$ajax.post("/api/article/getCommentList", {
+      this.commentList = await this.$ajax.post("/api/comment/getCommentList", {
         id: this.dataInfo.id
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="add-message">
     <div class="article-title">
-      {{ articleInfo.name }}
+      {{ articleInfo.articleName }}
     </div>
     <textarea
       class="article-content"
@@ -29,30 +29,34 @@ export default {
   data() {
     return {
       articleInfo: {
-        name: "",
-        id: "",
-        content:""
+        articleName: "",
+        articleId: "",
+        content: "",
+        userId: "",
+        nickName: ""
       }
     }
   },
   methods: {
     async sendMessage() {
       if (this.articleInfo.content && this.articleInfo.content.trim() !== "") {
-        let result = await this.$ajax.post("/api/article/sendMessage", this.articleInfo)
+        let result = await this.$ajax.post("/api/comment/add", this.articleInfo)
         if (result) {
           wx.showToast({
             title: "留言成功"
           })
           setTimeout(() => {
-            wx.reLaunch({url: "/pages/article/details?id=" + this.articleInfo.id})
+            wx.reLaunch({url: "/pages/article/details?id=" + this.articleInfo.articleId})
           }, 2000)
         }
       }
     }
   },
   onLoad: function (params) {
-    this.articleInfo.name = params.articleName;
-    this.articleInfo.id = params.articleId;
+    this.articleInfo.articleName = params.articleName;
+    this.articleInfo.articleId = params.articleId;
+    this.articleInfo.userId = wx.getStorageSync("userId")
+    this.articleInfo.nickName = wx.getStorageSync("nickName")
   }
 }
 </script>
@@ -64,7 +68,7 @@ export default {
 
     .article-title {
       width: calc(100% - 80rpx);
-      margin:0 40rpx 0;
+      margin: 0 40rpx 0;
       padding-top: 40rpx;
       font-size: 26rpx;
       line-height: 50rpx;
@@ -104,10 +108,12 @@ export default {
       line-height: 90rpx;
       margin: 40rpx 40rpx;
       position: relative;
-      &.disabled{
+
+      &.disabled {
         background: #E8E8E8;
         color: #999999;
       }
+
       &.button-hover {
         background: #E8E8E8;
         color: #ffffff;

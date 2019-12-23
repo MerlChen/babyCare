@@ -85,7 +85,7 @@ export default {
       list: []
     };
   },
-  onLoad () {
+  onLoad() {
     this.$nextTick(() => {
       this.getUserInfo();
       this.getArticleList();
@@ -175,6 +175,7 @@ export default {
             .then(result => {
               if (result) {
                 wx.setStorageSync("userId", result.userId);
+                wx.setStorageSync("nickName", result.nickName);
               }
             });
         }
