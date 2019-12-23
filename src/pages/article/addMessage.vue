@@ -18,7 +18,7 @@
       :class="{'disabled': articleInfo.content.length === 0}"
       hover-class="button-hover"
     >
-      留言
+      订阅并留言
     </div>
   </div>
 </template>
@@ -33,32 +33,62 @@ export default {
         articleId: "",
         content: "",
         userId: "",
-        nickName: ""
+        nickName: "",
+        avatarUrl: "",
+        openId: ""
       }
     }
   },
   methods: {
-    async sendMessage() {
-      if (this.articleInfo.content && this.articleInfo.content.trim() !== "") {
-        let result = await this.$ajax.post("/api/comment/add", this.articleInfo)
+    /**
+     * @description 提交留言
+     */
+    sendMessage() {
+      let _this = this;
+      uni.requestSubscribeMessage({
+        tmplIds: ['ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU'],
+        success: function (res) {
+          if (res['ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU'] === 'accept') {
+            _this.submitMessage();
+          }
+        },
+        fail: function (err) {
+          wx.showToast({
+            title: "未能完成订阅"
+          })
+        }
+      })
+    },
+    async submitMessage() {
+      let _this = this;
+      let userInfo = JSON.parse(wx.getStorageSync("userInfo"))
+      _this.articleInfo.userId = wx.getStorageSync("userId")
+      _this.articleInfo.nickName = userInfo.nickName;
+      _this.articleInfo.avatarUrl = userInfo.avatarUrl;
+      _this.articleInfo.openId = userInfo.openId;
+      if (_this.articleInfo.content && _this.articleInfo.content.trim() !== "") {
+        let result = await _this.$ajax.post("/api/comment/add", _this.articleInfo)
         if (result) {
           wx.showToast({
             title: "留言成功"
           })
           setTimeout(() => {
-            wx.reLaunch({url: "/pages/article/details?id=" + this.articleInfo.articleId})
+            wx.reLaunch({url: "/pages/article/details?id=" + _this.articleInfo.articleId})
           }, 2000)
+        } else {
+          wx.showModal({
+            title: "留言提交失败",
+            showCancel: false
+          })
         }
+      } else {
+        console.error("消息数据有问题")
       }
     }
   },
   onLoad: function (params) {
     this.articleInfo.articleName = params.articleName;
     this.articleInfo.articleId = params.articleId;
-    let userInfo = JSON.parse(wx.getStorageSync("userInfo"))
-    this.articleInfo.userId = wx.getStorageSync("userId")
-    this.articleInfo.nickName = userInfo.nickName;
-    this.articleInfo.avatarUrl = userInfo.avatarUrl;
   }
 }
 </script>

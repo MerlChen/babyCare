@@ -170,14 +170,12 @@ export default {
           let userInfo = res.userInfo;
           userInfo.openId = authInfo.openid;
           userInfo.userId = userData[0].userId;
-          _this.$ajax
-            .post("/api/user/updateUserInfo", userInfo)
-            .then(result => {
-              if (result) {
-                wx.setStorageSync("userId", result.userId);
-                wx.setStorageSync("userInfo",JSON.stringify(result))
-              }
-            });
+          _this.$ajax.post("/api/user/updateUserInfo", userInfo).then(result => {
+            if (result) {
+              wx.setStorageSync("userId", result.userId);
+              wx.setStorageSync("userInfo", JSON.stringify(result))
+            }
+          });
         }
       });
     },
