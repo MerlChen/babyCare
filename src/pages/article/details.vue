@@ -264,6 +264,7 @@ export default {
       }
 
       .article-comment-list {
+        padding-bottom: 60rpx;
         .article-comment-item {
           margin-bottom: 40rpx;
           display: flex;
