@@ -156,7 +156,7 @@ export default {
      * @description 写留言
      */
     writeMessage() {
-
+      wx.navigateTo({url: "/pages/article/addMessage?articleId=" + this.dataInfo.id + "&articleName=" + this.dataInfo.title})
     }
   },
   onLoad: function (options) {

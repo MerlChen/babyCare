@@ -19,6 +19,12 @@
       }
     },
     {
+      "path": "pages/article/addMessage",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
       "path": "pages/challenge/index",
       "style": {
         "navigationBarTitleText": "问答挑战"
