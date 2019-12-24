@@ -7,7 +7,7 @@
     <div class="auth-dialog">
       <image
         class="wechat-logo"
-        src="./../static/logo.jpg"
+        src="./../static/logo.png"
       >
       </image>
       <div class="main-title">
