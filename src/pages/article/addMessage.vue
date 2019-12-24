@@ -49,16 +49,28 @@ export default {
         tmplIds: ['ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU'],
         success: function (res) {
           if (res['ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU'] === 'accept') {
-            _this.submitMessage();
+            wx.showToast({
+              title: "已完成订阅"
+            })
           }
         },
         fail: function (err) {
           wx.showToast({
             title: "未能完成订阅"
           })
+        },
+        complete: function () {
+          wx.showToast({
+            title: "完成了操作"
+          })
+          _this.submitMessage()
         }
       })
     },
+    /**
+     * @description 提交留言
+     * @return {Promise<void>}
+     */
     async submitMessage() {
       let _this = this;
       let userInfo = JSON.parse(wx.getStorageSync("userInfo"))
