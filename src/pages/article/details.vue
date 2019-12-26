@@ -64,7 +64,7 @@
               {{ item.content }}
             </div>
             <!-- 作者回复内容 -->
-            <div class="comment-item-reply" v-if="item.reply">
+            <div class="comment-item-reply" v-if="item.reply && item.reply !== ''">
               <span class="author">
                 作者回复：
               </span>
@@ -279,6 +279,7 @@ export default {
           }
         },
         fail: function (err) {
+          console.log(err);
           wx.showToast({
             title: "不通知审核结果"
           })
