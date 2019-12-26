@@ -92,6 +92,7 @@
         <div
           v-if="inputFocus || messageSend"
           @click="sendComment"
+          :class="{'disabled': commentInfo.content.length === 0 || commentInfo.content.trim() === '' || messageSend}"
           class="send-message-btn"
         >
           {{ messageSend ? '提交中' : '提交'}}
@@ -268,6 +269,9 @@ export default {
      */
     sendComment() {
       let _this = this;
+      if (_this.commentInfo.content.trim() === "") {
+        return;
+      }
       _this.messageSend = true;
       wx.requestSubscribeMessage({
         tmplIds: ['ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU'],
@@ -528,7 +532,8 @@ export default {
           width: 710rpx;
 
           input {
-            width: 600rpx;
+            width: 580rpx;
+            margin-right: 20rpx;
           }
 
           .send-message-btn {
@@ -536,7 +541,14 @@ export default {
             font-size: 24rpx;
             text-align: center;
             line-height: 60rpx;
-            color: #EE7BA6;
+            color: #FFFFFF;
+            height: 60rpx;
+            background-color: #EE7BA6;
+            border-radius: 30rpx 30rpx 30rpx;
+
+            &.disabled {
+              opacity: 0.5;
+            }
           }
         }
       }
