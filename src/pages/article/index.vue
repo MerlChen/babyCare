@@ -264,7 +264,7 @@ export default {
    */
   onShareAppMessage() {
     return {
-      title: "育儿帮-专注育儿知识传授",
+      title: "育婴宝典-专注传播科学育儿知识",
       url: "/pages/article/index",
       imageUrl: "/static/pic.png"
     };

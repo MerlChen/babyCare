@@ -112,7 +112,7 @@ export default {
    */
   onShareAppMessage: function () {
     return {
-      title: "我正在“育儿帮”学习专业的育儿知识",
+      title: "我正在“育婴宝典”学习科学的育儿知识",
       path: "/pages/article/index"
     };
   },
