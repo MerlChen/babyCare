@@ -192,6 +192,8 @@ export default {
         articleId: this.dataInfo.id,
         articleName: this.dataInfo.title,
         description: this.dataInfo.description,
+        typeName: this.dataInfo.typeName,
+        typeId: this.dataInfo.typeId,
         thumb: this.dataInfo.thumb,
         userId: wx.getStorageSync("userId")
       })
