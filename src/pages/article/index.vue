@@ -253,7 +253,7 @@ export default {
      * @param itemData
      */
     showTypeList(itemData) {
-      wx.redirectTo({url: "/pages/article/list?id=" + itemData.id + "&typeName=" + itemData.name})
+      wx.navigateTo({url: "/pages/article/list?id=" + itemData.id + "&typeName=" + itemData.name})
     },
     filterArticle() {
       console.log("搜索");
