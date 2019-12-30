@@ -109,11 +109,15 @@
           </div>
         </div>
         <!-- 点赞数 -->
-        <div class="article-basic-item" :class="{'in-fact': dataInfo.liked}">
+        <div
+          class="article-basic-item"
+          :class="{'in-fact': dataInfo.liked}"
+          @click="toggleArticleLike"
+        >
           <img src="./../../static/article/like.png" alt="" v-if="!dataInfo.liked">
           <img src="./../../static/article/liked.png" alt="" v-if="dataInfo.liked">
           <div class="label">
-            {{ "赞 " + (dataInfo.likeNum ? dataInfo.likeNum : 0) }}
+            {{ "赞 " + (dataInfo.likedNum ? dataInfo.likedNum : 0) }}
           </div>
         </div>
       </div>
@@ -153,7 +157,9 @@ export default {
         nickName: "",
         avatarUrl: "",
         openId: ""
-      }
+      },
+      // 登录人用户信息
+      userInfo: {}
     }
   },
   methods: {
@@ -224,7 +230,8 @@ export default {
      */
     async getCommentList() {
       this.commentList = await this.$ajax.post("/api/comment/getCommentList", {
-        id: this.dataInfo.id
+        id: this.dataInfo.id,
+        userId: this.userInfo.userId
       })
     },
     /**
@@ -233,9 +240,39 @@ export default {
      */
     toggleItemLike(itemData) {
       if (!itemData.liked) {
-        this.$set(itemData, 'liked', true)
+        this.likeCommentInfo(itemData);
       } else {
-        itemData.liked = !itemData.liked;
+        this.cancelLikeCommentInfo(itemData);
+      }
+    },
+    /**
+     * @description 支持留言
+     * @param commentData
+     */
+    async likeCommentInfo(commentData) {
+      let result = await this.$ajax.post("/api/like/comment", {
+        articleId: this.dataInfo.id,
+        userId: this.userInfo.userId,
+        id: commentData.id
+      });
+      if (result) {
+        commentData.likeNum += 1;
+        commentData.liked = true;
+        commentData.likeDataId = result.id;
+      }
+    },
+    /**
+     * @description 取消支持留言
+     * @param commentData
+     */
+    async cancelLikeCommentInfo(commentData) {
+      let result = await this.$ajax.post("/api/like/commentCancel", {
+        likeDataId: commentData.likeDataId,
+        commentId: commentData.id
+      });
+      if (result) {
+        commentData.likeNum = commentData.likeNum > 1 ? commentData.likeNum -= 1 : 0;
+        commentData.liked = false;
       }
     },
     /**
@@ -299,15 +336,50 @@ export default {
       })
     },
     /**
+     * @description 文章点赞/取消点赞
+     */
+    toggleArticleLike() {
+      if (this.dataInfo.liked) {
+        this.cancelArticleLike();
+      } else {
+        this.likeArticleInfo();
+      }
+    },
+    /**
+     * @description 取消文章点赞
+     */
+    async cancelArticleLike() {
+      let result = await this.$ajax.post("/api/like/articleCancel", {
+        id: this.dataInfo.likeDataId,
+        articleId: this.dataInfo.id
+      })
+      if (result) {
+        this.dataInfo.liked = false;
+        this.dataInfo.likedNum = this.dataInfo.likedNum > 1 ? this.dataInfo.likedNum - 1 : 0;
+      }
+    },
+    /**
+     * @description 给文章点赞
+     */
+    async likeArticleInfo() {
+      let result = await this.$ajax.post("/api/like/article", {
+        articleId: this.dataInfo.id,
+        userId: this.userInfo.userId
+      })
+      if (result) {
+        this.dataInfo.liked = true;
+        this.dataInfo.likedNum += 1;
+      }
+    },
+    /**
      * @description 提交留言表单
      */
     async submitMessage() {
       let _this = this;
-      let userInfo = JSON.parse(wx.getStorageSync("userInfo"))
-      _this.commentInfo.userId = userInfo.userId;
-      _this.commentInfo.nickName = userInfo.nickName;
-      _this.commentInfo.avatarUrl = userInfo.avatarUrl;
-      _this.commentInfo.openId = userInfo.openId;
+      _this.commentInfo.userId = _this.userInfo.userId;
+      _this.commentInfo.nickName = _this.userInfo.nickName;
+      _this.commentInfo.avatarUrl = _this.userInfo.avatarUrl;
+      _this.commentInfo.openId = _this.userInfo.openId;
       _this.commentInfo.articleId = _this.dataInfo.id;
       _this.commentInfo.articleName = _this.dataInfo.title;
       if (_this.commentInfo.content && _this.commentInfo.content.trim() !== "") {
@@ -334,6 +406,7 @@ export default {
    * @description 初始化读取文章数据信息
    */
   onLoad: function (options) {
+    this.userInfo = JSON.parse(wx.getStorageSync("userInfo"));
     this.getArticleDetails(options)
   },
   /**
