@@ -72,7 +72,7 @@ export default {
      */
     changePage(itemData) {
       if (itemData.id !== this.currentRoute) {
-        wx.navigateTo({ url: itemData.pagePath });
+        wx.redirectTo({ url: itemData.pagePath });
       }
     }
   }

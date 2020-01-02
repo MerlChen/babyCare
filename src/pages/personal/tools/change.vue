@@ -1,8 +1,10 @@
 <template>
   <div class="tools-change">
+    <!-- 授权弹窗 -->
+    <auth-dialog></auth-dialog>
     <div class="tools-change-item">
       <div class="label">
-        微量元素：
+        维生素：
       </div>
       <picker
         @change="changeType"
@@ -58,14 +60,16 @@
 </template>
 
 <script>
+import authDialog from './../../../components/authDialog'
 export default {
   name: "change",
+  components:{ authDialog },
   data() {
     return {
       typeList: [
         {
           id: "1",
-          name: "请选择微量元素"
+          name: "请选择维生素"
         },
         {
           id: "VA",

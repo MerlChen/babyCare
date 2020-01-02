@@ -7,6 +7,8 @@
  -->
 <template>
   <div class="personal-page">
+    <!-- 授权弹窗 -->
+    <auth-dialog></auth-dialog>
     <!-- 用户信息 -->
     <div class="personal-info">
       <!-- 用户头像 -->
@@ -62,11 +64,12 @@
 <script>
 import tabBar from "./../../components/tabBar";
 import {levelCount} from "../../tools/dataFormat";
-
+import authDialog from "./../../components/authDialog"
 export default {
   name: "index",
   components: {
-    tabBar
+    tabBar,
+    authDialog
   },
   data() {
     return {
@@ -93,7 +96,7 @@ export default {
         },
         {
           id: "myTools",
-          name: "微量元素单位转换",
+          name: "维生素单位转换",
           iconPath: "./../../static/personal/tools.png",
           pageInfo: "/pages/personal/tools/change"
         },

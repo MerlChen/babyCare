@@ -1,5 +1,7 @@
 <template>
   <div class="rpx" id="articleDetails">
+    <!-- 授权弹窗 -->
+    <auth-dialog></auth-dialog>
     <div class="article-main">
       <div class="article-title">
         {{ dataInfo.title }}
@@ -128,8 +130,10 @@
 </template>
 
 <script>
+import authDialog from './../../components/authDialog'
 export default {
   name: "details",
+  components:{ authDialog },
   data() {
     return {
       // 文章信息

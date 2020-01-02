@@ -2,7 +2,7 @@
   <!-- 授权弹窗 -->
   <div
     class="auth-main"
-    v-if="value"
+    v-show="showAuth"
   >
     <div class="auth-dialog">
       <image
@@ -30,10 +30,9 @@
 <script>
 export default {
   name: "dialog",
-  props: {
-    value: {
-      type: Boolean,
-      default: false
+  data(){
+    return{
+      showAuth:false
     }
   },
   methods: {
@@ -49,7 +48,7 @@ export default {
           duration: 2000, //延迟时间,
           mask: true //显示透明蒙层，防止触摸穿透
         });
-        this.$emit('change', 'hide')
+        this.getUserInfo('hide');
       } else {
         uni.showToast({
           title: "请重新授权",
@@ -58,7 +57,125 @@ export default {
           mask: true
         })
       }
-    }
+    },
+    /**
+     * @description 获取用户信息--检测用户是否授权
+     */
+    getUserInfo(showAuth) {
+      let _this = this;
+      // 如果是弹窗过来的，那么直接关闭弹窗，读取用户信息
+      if (showAuth === "hide") {
+        this.showAuth = false;
+      }
+      wx.getSetting({
+        success: res => {
+          // 如果已授权，执行微信登录请求
+          if (res && res.authSetting["scope.userInfo"]) {
+            _this.wxLogin();
+          }
+          // 若未授权，跳转至授权界面
+          else {
+            _this.showAuth = true;
+          }
+        }
+      });
+    },
+    /**
+     * @description 执行微信登录
+     */
+    wxLogin() {
+      let _this = this;
+      wx.login({
+        success: res => {
+          _this.getOpenId(res);
+        }
+      });
+    },
+    /**
+     * @description 根据登录时返回的code，获取openId
+     * @param codeInfo
+     */
+    getOpenId(codeInfo) {
+      let _this = this;
+      // 获取用户openId
+      _this.$ajax.post("/api/user/getOpenId", codeInfo).then(authInfo => {
+        if (authInfo && authInfo.openid) {
+          _this.userLogin(authInfo);
+        }
+      });
+    },
+    /**
+     * @description 根据返回的授权信息，检测用户系统中是否存在该用户
+     * @description 若系统中存在该用户，将用户的userId存储至本地
+     * @description 若系统中不存在该用户，执行用户注册操作
+     * @param authInfo
+     */
+    userLogin(authInfo) {
+      let _this = this;
+      _this.$ajax.post("/api/user/login", {
+        openId: authInfo.openid
+      }).then(res => {
+        if (res) {
+          _this.updateUserInfo(authInfo, res);
+        } else {
+          _this.userRegister(authInfo);
+        }
+      });
+    },
+    /**
+     * @description 更新用户信息
+     * @param authInfo
+     * @param userData
+     */
+    updateUserInfo(authInfo, userData) {
+      let _this = this;
+      wx.getUserInfo({
+        lang: "zh_CN",
+        success: res => {
+          let userInfo = res.userInfo;
+          userInfo.openId = authInfo.openid;
+          userInfo.userId = userData[0].userId;
+          _this.$ajax.post("/api/user/updateUserInfo", userInfo).then(result => {
+            if (result) {
+              wx.setStorageSync("userId", result.userId);
+              wx.setStorageSync("userInfo", JSON.stringify(result))
+            }
+          });
+        }
+      });
+    },
+    /**
+     * @description 执行用户注册过后，将用户的Id存储至本地
+     * @param authInfo
+     */
+    userRegister(authInfo) {
+      let _this = this;
+      wx.getUserInfo({
+        lang: "zh_CN",
+        success: res => {
+          let userInfo = Object.assign({}, res.userInfo);
+          userInfo.openId = authInfo.openid;
+          _this.$ajax
+            .post("/api/user/register", {
+              avatarUrl: userInfo.avatarUrl,
+              city: userInfo.city,
+              country: userInfo.country,
+              gender: userInfo.gender,
+              nickName: userInfo.nickName,
+              openId: userInfo.openId,
+              province: userInfo.province
+            })
+            .then(result => {
+              if (result) {
+                wx.setStorageSync("userId", result.userId);
+              }
+            });
+        }
+      });
+    },
+  },
+  mounted(){
+    this.getUserInfo();
   }
 }
 </script>

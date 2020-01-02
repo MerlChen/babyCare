@@ -10,6 +10,8 @@
     class="container"
     ref="container"
   >
+    <!-- 授权弹窗 -->
+    <auth-dialog></auth-dialog>
     <div class="title">
       2019年儿童身高体重标准快速筛选器
     </div>
@@ -232,9 +234,11 @@
 <script>
 let vm;
 import {bestAgeMatch} from "../../../tools/dataFormat"
+import authDialog from './../../../components/authDialog'
 
 export default {
   name: "index",
+  components:{ authDialog },
   data() {
     return {
       healthForm: {
