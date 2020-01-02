@@ -242,10 +242,7 @@ export default {
      */
     showArticleDetails(itemData) {
       uni.navigateTo({
-        url: "details?id=" + itemData.id
-      });
-      uni.setNavigationBarTitle({
-        title: itemData.title
+        url: "details?id=" + itemData.id + "&name=" + itemData.title
       });
     },
     /**
@@ -264,9 +261,9 @@ export default {
    */
   onShareAppMessage() {
     return {
-      title: "育婴宝典-专注传播科学育儿知识",
+      title: "育婴宝库-专注传播科学育儿知识",
       url: "/pages/article/index",
-      imageUrl: "/static/pic.png"
+      imageUrl: "/static/pic.jpg"
     };
   }
 };

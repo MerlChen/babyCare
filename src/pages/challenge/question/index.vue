@@ -37,20 +37,20 @@
       <div class="challenge-rules-item">
         3、答错后，将失去本次答题的机会
       </div>
+      <!--<div class="challenge-rules-item">-->
+        <!--4、每人每天拥有3次挑战机会，失去挑战机会后-->
+      <!--</div>-->
+      <!--<div class="challenge-rules-item">-->
+        <!--5、当无挑战机会后，可分享至微信好友进行助力-->
+      <!--</div>-->
+      <!--<div class="challenge-rules-item">-->
+        <!--6、好友每一次助力后，获取一次挑战次数-->
+      <!--</div>-->
+      <!--<div class="challenge-rules-item">-->
+        <!--7、每天最多拥有5次助力机会-->
+      <!--</div>-->
       <div class="challenge-rules-item">
-        4、每人每天拥有3次挑战机会，失去挑战机会后
-      </div>
-      <div class="challenge-rules-item">
-        5、当无挑战机会后，可分享至微信好友进行助力
-      </div>
-      <div class="challenge-rules-item">
-        6、好友每一次助力后，获取一次挑战次数
-      </div>
-      <div class="challenge-rules-item">
-        7、每天最多拥有5次助力机会
-      </div>
-      <div class="challenge-rules-item">
-        8、积分后期开放兑换育儿相关的物品哦
+        4、积分后期开放兑换育儿相关的物品哦
       </div>
     </div>
     <div class="challenge-button" @click="beginChallenge">

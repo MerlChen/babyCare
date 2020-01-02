@@ -445,10 +445,10 @@ export default {
    */
   onShareAppMessage() {
     return {
-      title: "优速查-快速查询、统计孩子的身高、体重",
-      url: "/pages/article/index",
-      desc: "查询并统计孩子的身高、体重发育趋势",
-      imageUrl: "/static/pic.png"
+      title: "我正在【育婴宝库】查询孩子的身高、体重跟同龄人的对比情况",
+      url: "/pages/personal/tools/search",
+      desc: "查询孩子的身高、体重发育是否达标",
+      imageUrl: "/static/pic.jpg"
     };
   },
   onPullDownRefresh() {

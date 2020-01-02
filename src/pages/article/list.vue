@@ -52,7 +52,7 @@ export default {
      */
     showArticleDetails(articleInfo) {
       uni.navigateTo({
-        url: "details?id=" + articleInfo.id
+        url: "details?id=" + articleInfo.id + "&name=" + articleInfo.title
       });
     }
   }

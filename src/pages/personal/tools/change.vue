@@ -213,7 +213,18 @@ export default {
     changeInternational(res) {
       this.dataInfo.international = res.target.value;
     }
-  }
+  },
+  /**
+   * @description 分享信息设置
+   */
+  onShareAppMessage() {
+    return {
+      title: "维生素的国际单位不会换算？快来【育婴宝库】进行数值转换吧",
+      url: "/pages/personal/tools/change",
+      desc: "维生素国际单位和常用单位转换",
+      imageUrl: "/static/pic.jpg"
+    };
+  },
 }
 </script>
 

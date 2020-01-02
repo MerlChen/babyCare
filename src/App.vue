@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  onLaunch: function() {
+  onLaunch: function () {
     // #ifdef APP-PLUS
     // 锁定屏幕方向
     plus.screen.lockOrientation("portrait-primary"); //锁定
@@ -50,55 +50,56 @@ export default {
 </script>
 
 <style lang="scss">
-.auth-main {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  .auth-dialog {
-    position: relative;
-    z-index: 3;
-    width: 600rpx;
-    height: 390rpx;
+  .auth-main {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    .auth-dialog {
+      position: relative;
+      z-index: 3;
+      width: 600rpx;
+      height: 390rpx;
+    }
   }
-}
 
-/* #ifndef APP-PLUS-NVUE */
-/* uni.css - 通用组件、模板样式库，可以当作一套ui库应用 */
-/* 以下样式用于 hello uni-app 演示所需 */
-page {
-  background-color: #f4f5f6;
-  height: 100%;
-  font-size: 28rpx;
-  line-height: 1.8;
-}
+  /* #ifndef APP-PLUS-NVUE */
+  /* uni.css - 通用组件、模板样式库，可以当作一套ui库应用 */
+  /* 以下样式用于 hello uni-app 演示所需 */
+  page {
+    background-color: #f4f5f6;
+    height: 100%;
+    font-size: 28rpx;
+    line-height: 1.8;
+  }
 
-.uni-header-logo {
-  padding: 30rpx;
-  text-align: center;
-  margin-top: 10rpx;
-}
+  .uni-header-logo {
+    padding: 30rpx;
+    text-align: center;
+    margin-top: 10rpx;
+  }
 
-.uni-header-logo image {
-  width: 140rpx;
-  height: 140rpx;
-}
+  .uni-header-logo image {
+    width: 140rpx;
+    height: 140rpx;
+  }
 
-.uni-hello-text {
-  color: #7a7e83;
-}
+  .uni-hello-text {
+    color: #7a7e83;
+  }
 
-.uni-hello-addfile {
-  text-align: center;
-  line-height: 300rpx;
-  background: #fff;
-  padding: 50rpx;
-  margin-top: 10px;
-  font-size: 38rpx;
-  color: #808080;
-}
+  .uni-hello-addfile {
+    text-align: center;
+    line-height: 300rpx;
+    background: #fff;
+    padding: 50rpx;
+    margin-top: 10px;
+    font-size: 38rpx;
+    color: #808080;
+  }
 
-/* #endif*/
+  /* #endif*/
 </style>

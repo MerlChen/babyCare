@@ -11,7 +11,7 @@
         />
         <div class="article-auth-main">
           <div class="article-auth-name">
-            {{ dataInfo.author ? dataInfo.author : '育婴宝典' }}
+            {{ dataInfo.author ? dataInfo.author : '育婴宝库' }}
           </div>
           <div class="article-auth-time">
             {{ dataInfo.createTime + ' 发表' }}
@@ -177,7 +177,7 @@ export default {
       this.favorite = result.favorite;
       result.createTime = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
       result.content = result.content.replace(/\<img/gi, "<img class='content-img'")
-      result.autor = result.autor ? result.autor : "育婴宝典";
+      result.autor = result.autor ? result.autor : "育婴宝库";
       this.dataInfo = result;
       this.getCommentList();
       uni.setNavigationBarTitle({
@@ -407,6 +407,9 @@ export default {
    */
   onLoad: function (options) {
     this.userInfo = JSON.parse(wx.getStorageSync("userInfo"));
+    uni.setNavigationBarTitle({
+      title: options.name
+    })
     this.getArticleDetails(options)
   },
   /**
