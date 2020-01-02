@@ -109,7 +109,7 @@ export default {
       dataInfo: {
         typeInfo: {
           id: "1",
-          name: "请选择微量元素"
+          name: "请选择维生素"
         },
         unitInfo: {
           id: "1",
@@ -171,7 +171,7 @@ export default {
         errorTips = "请选择标准单位"
       }
       if (typeId === "1") {
-        errorTips = "请选择微量元素"
+        errorTips = "请选择维生素"
       }
       if (errorTips) {
         wx.showModal({
