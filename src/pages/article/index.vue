@@ -7,8 +7,6 @@
  -->
 <template>
   <div class="home-page">
-    <!-- 授权弹窗 -->
-    <auth-dialog></auth-dialog>
     <!-- 搜索框 -->
     <div class="article-search">
       <input

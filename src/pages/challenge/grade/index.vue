@@ -1,7 +1,7 @@
 <template>
   <div class="grade-page">
-    <div class="grade-page-bg"></div>
-    <div class="grade-personal-info">
+    <div class="grade-page-bg" :class="{'half': !userInfo.userId}"></div>
+    <div class="grade-personal-info" v-if="userInfo && userInfo.userId">
       <img :src="userInfo.avatarUrl" alt="" class="grade-personal-head">
       <div class="grade-personal-main">
         <div class="grade-personal-name">
@@ -75,6 +75,10 @@ export default {
      */
     getUserInfo() {
       let userId = wx.getStorageSync("userId");
+      if(!userId){
+        this.getGradeList()
+        return
+      }
       this.$ajax.post("/api/user/getUserInfo", {
         userId: userId
       }).then(res => {
@@ -105,6 +109,9 @@ export default {
     .grade-page-bg {
       background-color: #EE7BA6;
       height: 106px;
+      &.half{
+        height: 66px;
+      }
     }
 
     .grade-personal-info {

@@ -1,7 +1,7 @@
 <template>
   <div class="tools-change">
     <!-- 授权弹窗 -->
-    <auth-dialog></auth-dialog>
+    <auth-dialog :to-main="`true`"></auth-dialog>
     <div class="tools-change-item">
       <div class="label">
         维生素：

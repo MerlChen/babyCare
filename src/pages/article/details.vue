@@ -1,7 +1,11 @@
 <template>
   <div class="rpx" id="articleDetails">
     <!-- 授权弹窗 -->
-    <auth-dialog></auth-dialog>
+    <auth-dialog
+      v-if="showAuthDialog"
+      @change="refuseAuth"
+    >
+    </auth-dialog>
     <div class="article-main">
       <div class="article-title">
         {{ dataInfo.title }}
@@ -77,8 +81,15 @@
       </div>
     </div>
     <!-- 留言区域 -->
-    <div class="article-comment-form" :class="{'focusInput': inputFocus || messageSend}"
-         :style="{'bottom': panelHeight + 'px'}">
+    <div class="article-comment-form login-tips" v-if="!userInfo.userId">
+      您还未登录，请先<span class="btn-login" @click="showAuthDialog = true">登录</span>
+    </div>
+    <div
+      class="article-comment-form"
+      v-if="userInfo.userId"
+      :class="{'focusInput': inputFocus || messageSend}"
+      :style="{'bottom': panelHeight + 'px'}"
+    >
       <!-- 输入框主体区域 -->
       <div class="article-comment-container" :class="{'show': inputFocus || messageSend }">
         <input
@@ -131,9 +142,10 @@
 
 <script>
 import authDialog from './../../components/authDialog'
+
 export default {
   name: "details",
-  components:{ authDialog },
+  components: {authDialog},
   data() {
     return {
       // 文章信息
@@ -163,7 +175,9 @@ export default {
         openId: ""
       },
       // 登录人用户信息
-      userInfo: {}
+      userInfo: {},
+      // 显示授权弹窗
+      showAuthDialog: false
     }
   },
   methods: {
@@ -173,10 +187,13 @@ export default {
      */
     async getArticleDetails(commentInfo) {
       this.articleParams = commentInfo.id ? commentInfo : this.articleParams;
-      let result = await this.$ajax.post("/api/article/details", {
-        id: this.articleParams.id,
-        userId: wx.getStorageSync("userId")
-      })
+      let params = {
+        id: this.articleParams.id
+      }
+      if(this.userInfo && this.userInfo.id){
+        params.userId = this.userInfo.userId
+      }
+      let result = await this.$ajax.post("/api/article/details", params)
       let d = new Date(result.createTime);
       this.favorite = result.favorite;
       result.createTime = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
@@ -233,10 +250,13 @@ export default {
      * @description 获取评论列表
      */
     async getCommentList() {
-      this.commentList = await this.$ajax.post("/api/comment/getCommentList", {
-        id: this.dataInfo.id,
-        userId: this.userInfo.userId
-      })
+      let params = {
+        id: this.dataInfo.id
+      }
+      if (this.userInfo && this.userInfo.userId) {
+        params.userId = this.userInfo.userId
+      }
+      this.commentList = await this.$ajax.post("/api/comment/getCommentList", params)
     },
     /**
      * @description 支持或取消某条留言
@@ -404,17 +424,31 @@ export default {
       } else {
         console.error("消息数据有问题")
       }
+    },
+    /**
+     * @description 用户拒绝授权
+     */
+    refuseAuth(res){
+      if(res === "success"){
+        this.userInfo = wx.getStorageSync("userInfo") ? JSON.parse(wx.getStorageSync("userInfo")) : null;
+        this.getArticleDetails();
+      } else {
+        wx.showToast({
+          title: "您已拒绝授权"
+        })
+        this.showAuthDialog = false;
+      }
     }
   },
   /**
    * @description 初始化读取文章数据信息
    */
   onLoad: function (options) {
-    this.userInfo = JSON.parse(wx.getStorageSync("userInfo"));
+    this.userInfo = wx.getStorageSync("userInfo") ? JSON.parse(wx.getStorageSync("userInfo")) : null;
     uni.setNavigationBarTitle({
       title: options.name
     })
-    this.getArticleDetails(options)
+    this.getArticleDetails(options);
   },
   /**
    * @description 下拉刷新文章数据信息
@@ -679,6 +713,18 @@ export default {
         z-index: 2;
         left: 0;
         width: 100%;
+      }
+
+      &.login-tips {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        color: #999999;
+        padding: 50rpx 0 50rpx;
+
+        .btn-login {
+          color: #EE7BA6;
+        }
       }
     }
 

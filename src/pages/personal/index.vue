@@ -8,15 +8,14 @@
 <template>
   <div class="personal-page">
     <!-- 授权弹窗 -->
-    <auth-dialog></auth-dialog>
+    <auth-dialog :to-main="`true`" @change="authDialogSetting"></auth-dialog>
     <!-- 用户信息 -->
     <div class="personal-info">
       <!-- 用户头像 -->
-      <image
+      <img
         class="personal-info-head"
         :src="userInfo.avatarUrl"
-      >
-      </image>
+      />
       <!-- 用户主体信息 -->
       <div class="personal-info-main">
         <!-- 用户昵称 -->
@@ -74,7 +73,7 @@ export default {
   data() {
     return {
       userInfo: {
-        avatarUrl: "",
+        avatarUrl: "../../static/logo2.png",
         nickName: "昵称就是七个字",
         province: "湖南",
         city: "长沙",
@@ -140,10 +139,23 @@ export default {
      */
     changePage(itemData) {
       uni.navigateTo({url: itemData.pageInfo});
+    },
+    /**
+     * @description 授权弹窗设置
+     * @param res
+     */
+    authDialogSetting(res){
+      if(res === "success"){
+        this.getPersonalInfo()
+      } else{
+        uni.showToast({
+          title: "您已拒绝授权"
+        });
+        setTimeout(()=>{
+          uni.reLaunch({ url: "/pages/article/index" })
+        },2000);
+      }
     }
-  },
-  mounted() {
-    this.getPersonalInfo();
   }
 };
 </script>

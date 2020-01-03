@@ -5,11 +5,10 @@
     v-show="showAuth"
   >
     <div class="auth-dialog">
-      <image
+      <img
         class="wechat-logo"
         src="./../static/logo.png"
-      >
-      </image>
+      />
       <div class="main-title">
         微信授权
       </div>
@@ -30,9 +29,16 @@
 <script>
 export default {
   name: "dialog",
-  data(){
-    return{
-      showAuth:false
+  props: {
+    toMain: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      showAuth: false,
+      emitResult: false
     }
   },
   methods: {
@@ -42,20 +48,22 @@ export default {
      */
     getAuthUserInfo(res) {
       if (res.detail.userInfo) {
-        uni.showToast({
-          title: "授权成功", //提示的内容,
-          icon: "success", //图标,
-          duration: 2000, //延迟时间,
-          mask: true //显示透明蒙层，防止触摸穿透
-        });
+        this.emitResult = true;
         this.getUserInfo('hide');
       } else {
-        uni.showToast({
-          title: "请重新授权",
-          icon: "error",
-          duration: 2000,
-          mask: true
-        })
+        if (this.toMain) {
+          wx.showModal({
+            title: "温馨提示",
+            content: "您已拒绝微信授权，因数据需要与帐号绑定，请您体验其他功能，给您带来的不变，敬请谅解。",
+            showCancel: false,
+            confirmColor: "#ee7ba6",
+            success:()=>{
+              uni.reLaunch({url: "/pages/article/index"})
+            }
+          })
+        } else {
+          this.$emit("change", "failed")
+        }
       }
     },
     /**
@@ -71,9 +79,15 @@ export default {
         success: res => {
           // 如果已授权，执行微信登录请求
           if (res && res.authSetting["scope.userInfo"]) {
+            uni.showToast({
+              title: "数据加载中",
+              icon: "loading",
+              duration: 30000,
+              mask: true
+            })
             _this.wxLogin();
           }
-          // 若未授权，跳转至授权界面
+          // 若未授权，显示授权弹窗
           else {
             _this.showAuth = true;
           }
@@ -139,6 +153,7 @@ export default {
             if (result) {
               wx.setStorageSync("userId", result.userId);
               wx.setStorageSync("userInfo", JSON.stringify(result))
+              _this.emitResultInfo();
             }
           });
         }
@@ -168,13 +183,22 @@ export default {
             .then(result => {
               if (result) {
                 wx.setStorageSync("userId", result.userId);
+                wx.setStorageSync("userInfo", JSON.stringify(result))
+                _this.emitResultInfo();
               }
             });
         }
       });
     },
+    /**
+     * @description 返回结果，执行回调
+     */
+    emitResultInfo() {
+      wx.hideToast();
+      this.$emit("change", "success")
+    }
   },
-  mounted(){
+  mounted() {
     this.getUserInfo();
   }
 }
