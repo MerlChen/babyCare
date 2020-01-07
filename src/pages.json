@@ -102,5 +102,30 @@
   "globalStyle": {
     "navigationBarTitleText": "育婴宝库-专注科学育儿知识普及",
     "navigationBarBackgroundColor": "#EE7BA6"
+  },
+  "tabBar": {
+    "color": "#AEAEAE",
+    "selectedColor": "#EE7BA6",
+    "borderStyle": "black",
+    "list": [
+      {
+        "selectedIconPath": "/static/tab/home_active.png",
+        "iconPath": "/static/tab/home.png",
+        "pagePath": "pages/article/index",
+        "text": "知识课堂"
+      },
+      {
+        "selectedIconPath": "/static/tab/question_active.png",
+        "iconPath": "/static/tab/question.png",
+        "pagePath": "pages/challenge/index",
+        "text": "知识问答"
+      },
+      {
+        "selectedIconPath": "/static/tab/personal_active.png",
+        "iconPath": "/static/tab/personal.png",
+        "pagePath": "pages/personal/index",
+        "text": "个人中心"
+      }
+    ]
   }
 }

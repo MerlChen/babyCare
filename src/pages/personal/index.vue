@@ -55,19 +55,15 @@
           class="personal-menu-right-icon">
       </div>
     </div>
-    <!-- tabBar -->
-    <tab-bar current-route="personal"></tab-bar>
   </div>
 </template>
 
 <script>
-import tabBar from "./../../components/tabBar";
 import {levelCount} from "../../tools/dataFormat";
 import authDialog from "./../../components/authDialog"
 export default {
   name: "index",
   components: {
-    tabBar,
     authDialog
   },
   data() {

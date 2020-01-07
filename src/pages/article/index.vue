@@ -52,18 +52,15 @@
         </div>
       </div>
     </div>
-    <tab-bar current-route="homePage"></tab-bar>
   </div>
 </template>
 
 <script>
-import tabBar from "./../../components/tabBar";
 import authDialog from "./../../components/authDialog";
 
 export default {
   name: "index",
   components: {
-    tabBar,
     authDialog
   },
   watch: {
@@ -150,7 +147,7 @@ export default {
 <style lang="scss" scoped>
   .home-page {
     background-color: #ffffff;
-    padding-bottom: 88rpx;
+    padding-bottom: 20rpx;
     /** 轮播图样式控制  */
     .ad-main {
       width: 100%;

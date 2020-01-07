@@ -18,18 +18,15 @@
       </div>
       <div class="label">{{ item.name }}</div>
     </div>
-    <tab-bar current-route="challenge"></tab-bar>
   </div>
 </template>
 
 <script>
-import tabBar from "./../../components/tabBar";
 import authDialog from './../../components/authDialog'
 
 export default {
   name: "index",
   components: {
-    tabBar,
     authDialog
   },
   data() {
@@ -72,7 +69,7 @@ export default {
      */
     userAuthSetting(res) {
       this.showAuthDialog = false;
-      if(res === "success"){
+      if (res === "success") {
         let userId = wx.getStorageSync("userId");
         this.$ajax.post("/api/user/getUserInfo", {userId: userId}).then(res => {
           if (res) {
