@@ -8,7 +8,7 @@
 <template>
   <div class="personal-page">
     <!-- 授权弹窗 -->
-    <auth-dialog :to-main="`true`" @change="authDialogSetting"></auth-dialog>
+    <auth-dialog :to-main="`true`" current-route="personal"></auth-dialog>
     <!-- 用户信息 -->
     <div class="personal-info">
       <!-- 用户头像 -->
@@ -114,6 +114,9 @@ export default {
       path: "/pages/article/index"
     };
   },
+  onShow(){
+    console.log("加载")
+  },
   methods: {
     /**
      * @description 积分换算成等级
@@ -135,22 +138,6 @@ export default {
      */
     changePage(itemData) {
       uni.navigateTo({url: itemData.pageInfo});
-    },
-    /**
-     * @description 授权弹窗设置
-     * @param res
-     */
-    authDialogSetting(res){
-      if(res === "success"){
-        this.getPersonalInfo()
-      } else{
-        uni.showToast({
-          title: "您已拒绝授权"
-        });
-        setTimeout(()=>{
-          uni.reLaunch({ url: "/pages/article/index" })
-        },2000);
-      }
     }
   }
 };

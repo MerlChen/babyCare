@@ -86,7 +86,6 @@ export default {
   width: 100%;
   height: 88upx;
   background-color: #ffffff;
-  z-index: 1;
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
@@ -107,6 +106,7 @@ export default {
       margin-top: 4upx;
       font-size: 24upx;
       line-height: 24upx;
+      color: #AEAEAE;
       &.active {
         color: #ee7ba6;
       }

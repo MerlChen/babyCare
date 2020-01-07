@@ -23,22 +23,45 @@
         立即授权
       </button>
     </div>
+    <tab-bar
+      v-if="showAuth && currentRoute !== ''"
+      :currentRoute="currentRoute"
+    >
+    </tab-bar>
   </div>
 </template>
 
 <script>
+import tabBar from './../components/tabBar'
+
 export default {
   name: "dialog",
+  components: {
+    tabBar
+  },
   props: {
     toMain: {
       type: Boolean,
       default: false
+    },
+    currentRoute: {
+      type: String,
+      default: ""
     }
   },
   data() {
     return {
       showAuth: false,
       emitResult: false
+    }
+  },
+  watch: {
+    showAuth(nVal) {
+      if (nVal) {
+        wx.hideTabBar()
+      } else {
+        wx.showTabBar()
+      }
     }
   },
   methods: {
@@ -57,7 +80,8 @@ export default {
             content: "您已拒绝微信授权，因数据需要与帐号绑定，请您体验其他功能，给您带来的不变，敬请谅解。",
             showCancel: false,
             confirmColor: "#ee7ba6",
-            success:()=>{
+            success: () => {
+              wx.showTabBar()
               uni.reLaunch({url: "/pages/article/index"})
             }
           })

@@ -3,6 +3,7 @@
     <auth-dialog
       v-if="showAuthDialog"
       :to-main="`true`"
+      current-route="challenge"
       @change="userAuthSetting"
     >
     </auth-dialog>
