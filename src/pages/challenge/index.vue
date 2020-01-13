@@ -75,6 +75,7 @@ export default {
         this.$ajax.post("/api/user/getUserInfo", {userId: userId}).then(res => {
           if (res) {
             wx.setStorageSync("userInfo", JSON.stringify(res))
+            wx.navigateTo({ url: "/pages/challenge/question/index"})
           }
         });
       }

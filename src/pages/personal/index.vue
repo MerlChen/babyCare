@@ -8,7 +8,12 @@
 <template>
   <div class="personal-page">
     <!-- 授权弹窗 -->
-    <auth-dialog :to-main="`true`" current-route="personal"></auth-dialog>
+    <auth-dialog
+      :to-main="`true`"
+      current-route="personal"
+      @change="getPersonalInfo"
+    >
+    </auth-dialog>
     <!-- 用户信息 -->
     <div class="personal-info">
       <!-- 用户头像 -->
@@ -46,13 +51,14 @@
         <img
           :src="item.iconPath"
           class="personal-menu-icon"
-        />
+          alt=""/>
         <div class="personal-menu-name">
           {{ item.name }}
         </div>
         <img
           src="./../../static/personal/right.png"
-          class="personal-menu-right-icon">
+          class="personal-menu-right-icon"
+          alt="">
       </div>
     </div>
   </div>
@@ -61,6 +67,7 @@
 <script>
 import {levelCount} from "../../tools/dataFormat";
 import authDialog from "./../../components/authDialog"
+
 export default {
   name: "index",
   components: {
@@ -114,8 +121,11 @@ export default {
       path: "/pages/article/index"
     };
   },
-  onShow(){
-    console.log("加载")
+  onShow() {
+    let userId = wx.getStorageSync("userId")
+    if(userId && userId !== ""){
+      this.getPersonalInfo()
+    }
   },
   methods: {
     /**
@@ -146,6 +156,7 @@ export default {
 <style lang="scss">
   .personal-page {
     box-sizing: border-box;
+    min-height: 100%;
 
     .personal-info {
       display: flex;

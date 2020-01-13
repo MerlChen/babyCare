@@ -72,45 +72,50 @@ export default {
      */
     changePage(itemData) {
       if (itemData.id !== this.currentRoute) {
-        wx.navigateTo({ url: itemData.pagePath });
+        wx.navigateTo({url: itemData.pagePath});
       }
     }
   }
 };
 </script>
 <style lang="scss">
-.tab-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 88upx;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  box-sizing: border-box;
-  border-top: 2upx solid #e8e8e8;
-  .tab-bar-item {
-    width: calc(100% / 3);
-    text-align: center;
-    padding: 10upx 0;
+  .tab-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 88rpx;
+    background-color: rgba(255, 255, 255, 0.60);
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    .tab-bar-item-img {
-      width: 40upx;
-      height: 40upx;
-    }
-    .tab-bar-item-name {
-      width: 100%;
-      margin-top: 4upx;
-      font-size: 24upx;
-      line-height: 24upx;
-      color: #AEAEAE;
-      &.active {
-        color: #ee7ba6;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border-top: 2rpx solid #e8e8e8;
+    z-index: 2;
+
+    .tab-bar-item {
+      width: calc(100% / 3);
+      text-align: center;
+      padding: 10rpx 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .tab-bar-item-img {
+        width: 40rpx;
+        height: 40rpx;
+      }
+
+      .tab-bar-item-name {
+        width: 100%;
+        margin-top: 4rpx;
+        font-size: 24rpx;
+        line-height: 24rpx;
+        color: #AEAEAE;
+
+        &.active {
+          color: #ee7ba6;
+        }
       }
     }
   }
-}
 </style>

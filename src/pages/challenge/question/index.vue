@@ -53,7 +53,7 @@
         4、积分后期开放兑换育儿相关的物品哦
       </div>
     </div>
-    <div class="challenge-button" @click="beginChallenge">
+    <div class="challenge-button" hover-class="button-hover" @click="beginChallenge">
       开始挑战
     </div>
   </div>
@@ -219,6 +219,10 @@ export default {
       text-align: center;
       line-height: 90rpx;
       margin: 100rpx 40rpx 40rpx;
+    }
+    .button-hover{
+      background: #E8E8E8;
+      color: #ffffff;
     }
   }
 </style>

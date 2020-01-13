@@ -10,8 +10,7 @@
       <div
         class="answer-item"
         :class="{
-        'is-right': needWait && 'optionA' === list[index].answer,
-        'is-error': needWait && 'optionA' !== list[index].answer
+        'is-right': needWait && 'optionA' === list[index].answer
         }"
         @click="checkAnswer('optionA')"
         v-if="list[index].optionA"
@@ -32,8 +31,7 @@
       <div
         class="answer-item"
         :class="{
-        'is-right': needWait && 'optionB' === list[index].answer,
-        'is-error': needWait && 'optionB' !== list[index].answer
+        'is-right': needWait && 'optionB' === list[index].answer
         }"
         @click="checkAnswer('optionB')"
         v-if="list[index].optionB"
@@ -54,8 +52,7 @@
       <div
         class="answer-item"
         :class="{
-        'is-right': needWait && 'optionC' === list[index].answer,
-        'is-error': needWait && 'optionC' !== list[index].answer
+        'is-right': needWait && 'optionC' === list[index].answer
         }"
         @click="checkAnswer('optionC')"
         v-if="list[index].optionC"
@@ -76,8 +73,7 @@
       <div
         class="answer-item"
         :class="{
-        'is-right': needWait && 'optionD' === list[index].answer,
-        'is-error': needWait && 'optionD' !== list[index].answer
+        'is-right': needWait && 'optionD' === list[index].answer
         }"
         @click="checkAnswer('optionD')"
         v-if="list[index].optionD"
@@ -98,8 +94,7 @@
       <div
         class="answer-item"
         :class="{
-        'is-right': needWait && 'optionOne' === list[index].answer,
-        'is-error': needWait && 'optionOne' !== list[index].answer
+        'is-right': needWait && 'optionOne' === list[index].answer
         }"
         @click="checkAnswer('optionOne')"
         v-if="list[index].optionOne"
@@ -120,8 +115,7 @@
       <div
         class="answer-item"
         :class="{
-        'is-right': needWait && 'optionTwo' === list[index].answer,
-        'is-error': needWait && 'optionTwo' !== list[index].answer
+        'is-right': needWait && 'optionTwo' === list[index].answer
         }"
         @click="checkAnswer('optionTwo')"
         v-if="list[index].optionTwo"
@@ -146,13 +140,30 @@
         class="next-button"
         v-if="index < 9 && needWait && list[index].answer === answer"
         @click="changeQuestion"
+        hover-class="button-hover"
       >
         下一题
       </div>
       <div
         class="next-button"
+        v-if="index === 9 && needWait"
+        @click="reChallenge"
+        hover-class="button-hover"
+      >
+
+      </div>
+      <div
+        class="question-tips"
+        v-if="needWait && list[index].tips"
+        hover-class="button-hover"
+      >
+        解答：{{ list[index].tips }}
+      </div>
+      <div
+        class="next-button"
         v-if="answer !== list[index].answer && needWait"
         @click="reChallenge"
+        hover-class="button-hover"
       >
         重新挑战
       </div>
@@ -161,80 +172,81 @@
 </template>
 
 <script>
-  export default {
-    name: "answer",
-    data() {
-      return {
-        list: [],
-        index: 0,
-        needWait: false,
-        answer: false
+export default {
+  name: "answer",
+  data() {
+    return {
+      list: [],
+      index: 0,
+      needWait: false,
+      answer: false
+    }
+  },
+  mounted() {
+    this.getQuestionList()
+  },
+  methods: {
+    /**
+     * @description 获取问题列表
+     * @returns {Promise<void>}
+     */
+    async getQuestionList() {
+      uni.showLoading();
+      this.list = await this.$ajax.post("/api/question/list", {
+        pageSize: 10,
+        pageNo: 1
+      });
+      uni.hideLoading()
+    },
+    /**
+     * @description 检查选项是否就是答案
+     * @param answerData
+     */
+    checkAnswer(answerData) {
+      if (this.needWait) {
+        return
+      }
+      this.needWait = true;
+      this.answer = answerData;
+      // 答对并且已经是第十题的时候，更新分数
+      if (this.index === 9 && answerData === this.list[this.index].answer) {
+        this.index = 10;
+        this.submitScore(true);
+      }
+      // 如果答错，提交更新分数
+      if (answerData !== this.list[this.index].answer) {
+        this.submitScore();
       }
     },
-    mounted() {
+    /**
+     * @description 答对切换问题
+     */
+    changeQuestion() {
+      this.needWait = false;
+      this.index++;
+      this.answer = null;
+    },
+    /**
+     * @description 答错重新挑战
+     */
+    reChallenge() {
+      this.index = 0;
+      this.answer = null;
+      this.needWait = false;
       this.getQuestionList()
     },
-    methods: {
-      /**
-       * @description 获取问题列表
-       * @returns {Promise<void>}
-       */
-      async getQuestionList() {
-        uni.showLoading();
-        this.list = await this.$ajax.post("/api/question/list", {
-          pageSize: 10,
-          pageNo: 1
-        });
-        uni.hideLoading()
-      },
-      /**
-       * @description 检查选项是否就是答案
-       * @param answerData
-       */
-      checkAnswer(answerData) {
-        if (this.needWait) {
-          return
-        }
-        this.needWait = true;
-        this.answer = answerData;
-        // 答对并且已经是第十题的时候，更新分数
-        if (this.index === 9 && answerData === this.list[this.index].answer) {
-          this.submitScore();
-        }
-        // 如果答错，提交更新分数
-        if(answerData !== this.list[this.index].answer){
-          this.submitScore();
-        }
-      },
-      /**
-       * @description 答对切换问题
-       */
-      changeQuestion() {
-        this.needWait = false;
-        this.index++;
-        this.answer = null;
-      },
-      /**
-       * @description 答错重新挑战
-       */
-      reChallenge() {
-        this.index = 0;
-        this.answer = null;
-        this.needWait = false;
-        this.getQuestionList()
-      },
-      /**
-       * @description 答题完成提交分数
-       */
-      async submitScore() {
-        let userId = wx.getStorageSync("userId");
-        let result = await this.$ajax.post("/api/question/submit", {
-          userId: userId,
-          score: this.index * 10
-        });
-      }
+    /**
+     * @description 答题完成提交分数
+     */
+    async submitScore(fullRight) {
+      let userId = wx.getStorageSync("userId");
+      await this.$ajax.post("/api/question/submit", {
+        userId: userId,
+        score: fullRight ? 100 : this.index * 10
+      });
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -281,12 +293,9 @@
         }
 
         &.is-right {
-          background-color: #4cd964;
+          background-color: #9dd98a;
         }
 
-        &.is-error {
-          background-color: #FF0000;
-        }
       }
 
       .error-tips {
@@ -305,6 +314,21 @@
         text-align: center;
         line-height: 90rpx;
         margin: 60rpx 0 40rpx;
+        box-shadow: 2px 2px 2px #F095B7;
+      }
+
+      .question-tips {
+        display: block;
+        border-left: 8px solid #EE86AD;
+        padding: 5px 10px;
+        margin: 10px 0;
+        line-height: 1.4;
+        font-size: 100%;
+        background-color: #f1f1f1;
+      }
+      .button-hover{
+        background: #E8E8E8;
+        color: #ffffff;
       }
     }
   }

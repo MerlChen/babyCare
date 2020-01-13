@@ -71,13 +71,13 @@ export default {
      * @param babyData
      */
     getBabyInfo(babyData) {
-      uni.reLaunch({url: "/pages/personal/baby/details?id=" + babyData.id})
+      uni.navigateTo({url: "/pages/personal/baby/details?id=" + babyData.id})
     },
     /**
      * @description 添加宝宝数据
      */
     addBabyInfo() {
-      uni.reLaunch({url: "/pages/personal/baby/add"})
+      uni.navigateTo({url: "/pages/personal/baby/add"})
     }
   }
 }

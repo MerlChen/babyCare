@@ -23,11 +23,6 @@
         立即授权
       </button>
     </div>
-    <tab-bar
-      v-if="showAuth && currentRoute !== ''"
-      :currentRoute="currentRoute"
-    >
-    </tab-bar>
   </div>
 </template>
 
@@ -240,7 +235,6 @@ export default {
     z-index: 3;
 
     .auth-dialog {
-      position: fixed;
       width: 600rpx;
       height: 390rpx;
       background-color: #ffffff;
