@@ -48,7 +48,7 @@ function nextLevelCount(score) {
     level = '育儿叫兽'
   }
   if (score >= 1000) {
-    level = '权威砖专家'
+    level = '权威砖家'
   }
   if (score >= 2000) {
     level = "育儿圣者"

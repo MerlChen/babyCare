@@ -147,10 +147,10 @@
       <div
         class="next-button"
         v-if="index === 9 && needWait"
-        @click="reChallenge"
+        @click="backToQuestion"
         hover-class="button-hover"
       >
-
+        完成挑战
       </div>
       <div
         class="question-tips"
@@ -210,7 +210,6 @@ export default {
       this.answer = answerData;
       // 答对并且已经是第十题的时候，更新分数
       if (this.index === 9 && answerData === this.list[this.index].answer) {
-        this.index = 10;
         this.submitScore(true);
       }
       // 如果答错，提交更新分数
@@ -244,6 +243,12 @@ export default {
         userId: userId,
         score: fullRight ? 100 : this.index * 10
       });
+    },
+    /**
+     * @description 答题完成，返回答题主界面
+     */
+    backToQuestion() {
+      uni.redirectTo({url: "/pages/challenge/question/index"})
     }
   }
 }
@@ -326,7 +331,8 @@ export default {
         font-size: 100%;
         background-color: #f1f1f1;
       }
-      .button-hover{
+
+      .button-hover {
         background: #E8E8E8;
         color: #ffffff;
       }

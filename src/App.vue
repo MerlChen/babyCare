@@ -23,7 +23,7 @@ export default {
         imei: plus.device.imei
       },
       success: res => {
-        if (res.statusCode == 200 && res.data.isUpdate) {
+        if (parseInt(res.statusCode) === 200 && res.data.isUpdate) {
           let openUrl =
             plus.os.name === "iOS" ? res.data.iOS : res.data.Android;
           // 提醒用户更新
@@ -61,8 +61,8 @@ export default {
     .auth-dialog {
       position: relative;
       z-index: 3;
-      width: 600rpx;
-      height: 390rpx;
+      width: 600 rpx;
+      height: 390 rpx;
     }
   }
 
@@ -72,19 +72,19 @@ export default {
   page {
     background-color: #f4f5f6;
     height: 100%;
-    font-size: 28rpx;
+    font-size: 28 rpx;
     line-height: 1.8;
   }
 
   .uni-header-logo {
-    padding: 30rpx;
+    padding: 30 rpx;
     text-align: center;
-    margin-top: 10rpx;
+    margin-top: 10 rpx;
   }
 
   .uni-header-logo image {
-    width: 140rpx;
-    height: 140rpx;
+    width: 140 rpx;
+    height: 140 rpx;
   }
 
   .uni-hello-text {
@@ -93,11 +93,11 @@ export default {
 
   .uni-hello-addfile {
     text-align: center;
-    line-height: 300rpx;
+    line-height: 300 rpx;
     background: #fff;
-    padding: 50rpx;
+    padding: 50 rpx;
     margin-top: 10px;
-    font-size: 38rpx;
+    font-size: 38 rpx;
     color: #808080;
   }
 
