@@ -1,6 +1,5 @@
 {
-  "pages": [
-    {
+  "pages": [{
       "path": "pages/article/index",
       "style": {
         "navigationBarTitleText": "知识课堂"
@@ -32,15 +31,15 @@
       }
     },
     {
-      "path": "pages/challenge/question/answer",
-      "style": {
-        "navigationBarTitleText": "育儿问答挑战"
-      }
-    },
-    {
       "path": "pages/challenge/question/help",
       "style": {
         "navigationBarTitleText": "好友助力"
+      }
+    },
+    {
+      "path": "pages/challenge/question/answer",
+      "style": {
+        "navigationBarTitleText": "育儿问答挑战"
       }
     },
     {
@@ -113,8 +112,7 @@
     "color": "#AEAEAE",
     "selectedColor": "#EE7BA6",
     "borderStyle": "black",
-    "list": [
-      {
+    "list": [{
         "selectedIconPath": "/static/tab/home_active.png",
         "iconPath": "/static/tab/home.png",
         "pagePath": "pages/article/index",

@@ -25,8 +25,7 @@ updateManager.onUpdateFailed(function (res) {
     title: '更新失败',
     content: '请您检查网络是否正常',
     success(res) {
-      if (res.confirm) {
-      }
+      if (res.confirm) {}
     }
   });
 });
