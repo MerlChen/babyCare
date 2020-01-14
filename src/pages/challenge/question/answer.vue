@@ -241,7 +241,7 @@ export default {
       let userId = wx.getStorageSync("userId");
       await this.$ajax.post("/api/question/submit", {
         userId: userId,
-        score: fullRight ? 100 : this.index * 10
+        score: fullRight ? 10 : this.index
       });
     },
     /**
@@ -279,8 +279,8 @@ export default {
 
       .answer-item {
         width: calc(100% - 80rpx);
-        padding: 0 20rpx 0 60rpx;
-        line-height: 70rpx;
+        padding: 20rpx 20rpx 20rpx 60rpx;
+        line-height: 30rpx;
         border-radius: 30rpx 30rpx 30rpx;
         margin: 40rpx auto;
         background-color: #EE86AD;

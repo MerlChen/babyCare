@@ -24,6 +24,9 @@
         </div>
       </div>
     </div>
+    <div class="less-times-tips">
+      今日剩余答题次数：<span class="num">{{ userInfo.surplusAnswerTimes }}</span>
+    </div>
     <div class="challenge-rules">
       <div class="challenge-rules-title">
         挑战规则：
@@ -32,35 +35,40 @@
         1、每次答题将随机从题库中抽取10道题。
       </div>
       <div class="challenge-rules-item">
-        2、答对计10分，答错不扣分
+        2、答对计1积分，答错不扣分
       </div>
       <div class="challenge-rules-item">
         3、答错后，将失去本次答题的机会
       </div>
-      <!--<div class="challenge-rules-item">-->
-        <!--4、每人每天拥有3次挑战机会，失去挑战机会后-->
-      <!--</div>-->
-      <!--<div class="challenge-rules-item">-->
-        <!--5、当无挑战机会后，可分享至微信好友进行助力-->
-      <!--</div>-->
-      <!--<div class="challenge-rules-item">-->
-        <!--6、好友每一次助力后，获取一次挑战次数-->
-      <!--</div>-->
-      <!--<div class="challenge-rules-item">-->
-        <!--7、每天最多拥有5次助力机会-->
-      <!--</div>-->
       <div class="challenge-rules-item">
-        4、积分后期开放兑换育儿相关的物品哦
+        4、每人每天拥有3次挑战机会
+      </div>
+      <div class="challenge-rules-item">
+        5、当无挑战机会后，可分享至微信好友进行助力
+      </div>
+      <div class="challenge-rules-item">
+        6、好友每一次助力后，获取一次挑战次数
+      </div>
+      <div class="challenge-rules-item">
+        7、每天最多拥有3次助力机会
+      </div>
+      <div class="challenge-rules-item">
+        8、积分待后期开放兑换功能后，可以前往兑换商城免费进行兑换育儿相关的物品哦
       </div>
     </div>
-    <div class="challenge-button" hover-class="button-hover" @click="beginChallenge">
+    <div
+      class="challenge-button"
+      hover-class="button-hover"
+      @click="beginChallenge"
+      :class="{'disabled': parseInt(userInfo.surplusAnswerTimes) === 0}"
+    >
       开始挑战
     </div>
   </div>
 </template>
 
 <script>
-import {levelCount, nextLevelCount,levelPercentCount} from "../../../tools/dataFormat";
+import {levelCount, nextLevelCount, levelPercentCount} from "../../../tools/dataFormat";
 
 export default {
   name: "index",
@@ -92,9 +100,29 @@ export default {
      * @description 开始挑战
      */
     beginChallenge() {
+      // 检测剩余答题次数
+      if(parseInt(this.userInfo.surplusAnswerTimes) === 0){
+        uni.showModal({
+          title: "温馨提示",
+          content: parseInt(this.userInfo.surplusHelpTimes) === 0 ? "学习虽好，可也不要忘了多陪陪家人哦，请明日再来。" : "当前剩余答题次数为0，您还可以分享给好友进行助力。",
+          showCancel: false
+        })
+        return;
+      }
       uni.navigateTo({url: '/pages/challenge/question/answer'});
     }
-  }
+  },
+  /**
+   * @description 触发微信分享
+   * @return {{path: string, success: success, title: string, error: error}}
+   */
+  onShareAppMessage: function () {
+    return {
+      title: Math.random() > 0.5 ? "万水千山总是情，来波助力行不行。" : "你的好友 " + this.userInfo.nickName + " 需要你的帮助。",
+      path: "/pages/challenge/question/help?userId="+ this.userInfo.userId + "&nickName="+ this.userInfo.nickName,
+      imageUrl: "/static/pic.jpg"
+    };
+  },
 }
 </script>
 
@@ -191,9 +219,23 @@ export default {
       }
     }
 
-    .challenge-rules {
-      padding: 30rpx 30rpx 0;
+    .less-times-tips{
+      color: #333333;
+      font-size: 24rpx;
+      line-height: 40rpx;
+      margin: 30rpx 0;
+      padding: 0 20rpx;
+      .num{
+        color: #EE7BA6;
+        font-weight: bold;
+      }
+    }
 
+    .challenge-rules {
+      border-left: 8rpx solid #EE7BA6;
+      padding: 20rpx 20rpx;
+      margin: 30rpx 0;
+      background-color: #f1f1f1;
       .challenge-rules-title {
         font-size: 30rpx;
         line-height: 30rpx;
@@ -203,9 +245,9 @@ export default {
 
       .challenge-rules-item {
         font-size: 24rpx;
-        line-height: 24rpx;
+        line-height: 30rpx;
         margin-bottom: 5rpx;
-        color: #999999;
+        color: #666666;
       }
     }
 
@@ -219,8 +261,13 @@ export default {
       text-align: center;
       line-height: 90rpx;
       margin: 100rpx 40rpx 40rpx;
+      &.disabled{
+        background: #dedede;
+        color: #ffffff;
+      }
     }
-    .button-hover{
+
+    .button-hover {
       background: #E8E8E8;
       color: #ffffff;
     }

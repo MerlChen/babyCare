@@ -118,7 +118,8 @@ export default {
   onShareAppMessage: function () {
     return {
       title: "我正库【育婴宝库】学习科学的育儿知识",
-      path: "/pages/article/index"
+      path: "/pages/article/index",
+      imageUrl: "/static/pic.jpg"
     };
   },
   onShow() {
