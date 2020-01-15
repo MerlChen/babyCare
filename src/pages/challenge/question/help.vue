@@ -7,7 +7,7 @@
       :class="{'highScreen':needReset}"
     >您的好友{{ ' ' + linkInfo.nickName + ' ' }}需要您的帮助</div>
     <div class="tips-answer">答题的积分能免费兑换礼品哦</div>
-    <div class="help-button" hover-class="button-hover" @click="helpFriend">我要帮忙</div>
+    <div class="help-button" hover-class="button-hover" @click="checkHelpInfo">我要帮忙</div>
     <div class="copy-right">育婴宝库·传递科学的育儿知识</div>
     <authDialog v-if="showAuthDialog" @change="userAuthSetting"></authDialog>
   </div>
@@ -29,9 +29,12 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description 用户授权检测
+     */
     userAuthSetting(res) {
       if (res === "success") {
-        this.helpFriend();
+        this.checkHelpInfo();
       } else {
         wx.showModal({
           title: "温馨提示",
@@ -48,80 +51,91 @@ export default {
       }
     },
     /**
-     * @description 帮助朋友
+     * @description 检测是否可以帮助朋友进行助力
      */
-    async helpFriend() {
+    checkHelpInfo() {
+      let _this = this;
       let userId = wx.getStorageSync("userId");
       if (!userId) {
-        this.showAuthDialog = true;
+        _this.showAuthDialog = true;
       } else {
-        this.checkUseful();
-        let result = await this.$ajax.post("/api/question/helpFriend", {
-          userId: userId,
-          friendId: this.linkInfo.friendId
-        });
-        wx.showToast({
-          title: "数据请求中",
-          icon: "loading"
-        });
-        if (result) {
-          setTimeout(() => {
-            wx.hideToast();
-            wx.showModal({
-              title: "帮助成功",
-              content: "答题可免费换取礼品哦，您也要来答题吗？",
-              success: () => {
-                uni.reLaunch({ url: "/pages/challenge/question/index" });
+        if (_this.linkInfo.friendId === userId) {
+          wx.showModal({
+            title: "操作失败",
+            content: "咱是个讲原则的小程序，不能自己帮自己哦。",
+            showCancel: false
+          });
+        } else {
+          let friendArr = wx.getStorageSync("friendId")
+            ? wx.getStorageSync("friendId")
+            : [];
+          let helpTime = wx.getStorageSync("helpTime");
+          let d = new Date();
+          let now =
+            d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+          if (friendArr && friendArr.length > 0) {
+            let flag = false;
+            friendArr.map(item => {
+              if (item === _this.linkInfo.friendId && helpTime === now) {
+                flag = true;
               }
             });
-          }, 1000);
+            if (flag) {
+              wx.showModal({
+                title: "帮助失败",
+                content: "您今天已经帮助过TA了哦，明天再来吧",
+                success: () => {
+                  uni.reLaunch({ url: "/pages/article/index" });
+                },
+                showCancel: false
+              });
+            } else {
+              friendArr.push(_this.linkInfo.friendId);
+              wx.setStorageSync("helpTime", now);
+              wx.setStorageSync("friendId", friendArr);
+              _this.helpFriend();
+            }
+          } else {
+            friendArr.push(_this.linkInfo.friendId);
+            wx.setStorageSync("friendId", friendArr);
+            wx.setStorageSync("helpTime", now);
+            _this.helpFriend();
+          }
         }
       }
     },
     /**
-     * @description 检测是否已在今天帮助过该用户
+     * @description 帮助朋友
      */
-    async checkUseful() {
-      let userId = await wx.getStorageSync("userId");
-      if (this.linkInfo.friendId === userId) {
-        wx.showModal({
-          title: "操作失败",
-          content: "咱是个讲原则的小程序，不能自己帮自己哦。",
-          showCancel: false
-        });
-        return;
-      } else {
-        let friendArr = wx.getStorageSync("friendId")
-          ? wx.getStorageSync("friendId")
-          : [];
-        let helpTime = wx.getStorageSync("helpTime");
-        let d = new Date();
-        let now =
-          d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
-        if (friendArr && friendArr.length > 0) {
-          let flag = false;
-          friendArr.map(item => {
-            if (item === this.linkInfo.friendId && helpTime === now) {
-              flag = true;
+    async helpFriend() {
+      let userId = wx.getStorageSync("userId");
+      let result = await this.$ajax.post("/api/question/helpFriend", {
+        userId: userId,
+        friendId: this.linkInfo.friendId
+      });
+      wx.showToast({
+        title: "数据请求中",
+        icon: "loading"
+      });
+      if (result) {
+        setTimeout(() => {
+          wx.hideToast();
+          wx.showToast({
+            title: "帮助成功",
+            duration: 2000,
+            success: () => {
+              uni.reLaunch({ url: "/pages/article/index" });
             }
           });
-          if (flag) {
-            wx.showModal({
-              title: "帮助失败",
-              content: "您今天已经帮助过他了哦",
-              showCancel: false
-            });
-            return;
-          }
-        } else {
-          friendArr.push(this.linkInfo.friendId);
-          wx.setStorageSync("helpTime", now);
-        }
+        }, 1000);
       }
     }
   },
   onLoad(params) {
-    this.linkInfo = params;
+    this.linkInfo = {
+      friendId: params.friendId,
+      nickName: params.nickName
+    };
     wx.getSystemInfo({
       success: res => {
         if (res.screenHeight > 736) {
