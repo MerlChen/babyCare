@@ -194,7 +194,8 @@ export default {
       uni.showLoading();
       this.list = await this.$ajax.post("/api/question/list", {
         pageSize: 10,
-        pageNo: 1
+        pageNo: 1,
+        userId: wx.getStorageSync("userId")
       });
       uni.hideLoading()
     },
