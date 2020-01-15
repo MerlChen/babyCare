@@ -190,7 +190,7 @@ export default {
       let params = {
         id: this.articleParams.id
       }
-      if(this.userInfo && this.userInfo.id){
+      if(this.userInfo && this.userInfo.userId){
         params.userId = this.userInfo.userId
       }
       let result = await this.$ajax.post("/api/article/details", params)
@@ -346,7 +346,6 @@ export default {
           }
         },
         fail: function (err) {
-          console.log(err);
           wx.showToast({
             title: "不通知审核结果"
           })
