@@ -2,7 +2,7 @@
   <!-- 授权弹窗 -->
   <div class="auth-main" v-show="showAuth">
     <div class="auth-dialog">
-      <img class="wechat-logo" src="./../static/logo.png" />
+      <img class="wechat-logo" src="http://file.xmxui.com/logo.png" />
       <div class="main-title">微信授权</div>
       <div class="main-tips">为了您更好的使用本产品，请先完成微信授权</div>
       <button class="auth-btn" open-type="getUserInfo" @getuserinfo="getAuthUserInfo">立即授权</button>

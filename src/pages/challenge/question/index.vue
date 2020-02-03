@@ -2,7 +2,7 @@
   <div class="question-main">
     <div class="current-main">
       <div class="current-icon">
-        <img src="@/static/challenge/challenge.png" alt />
+        <img src="http://file.xmxui.com/challenge.png" alt />
       </div>
       <div class="current-info">
         <div class="current-info-level">
@@ -33,14 +33,21 @@
       <div class="challenge-rules-item">6、好友每一次助力后，获取一次挑战次数</div>
       <div class="challenge-rules-item">7、每天最多拥有3次助力机会</div>
       <div class="challenge-rules-item">8、每个好友每天只能帮助同一分享者一次</div>
-      <div class="challenge-rules-item">9、积分待后期开放兑换功能后，可以前往兑换商城免费进行兑换育儿相关的物品哦</div>
+      <div class="challenge-rules-item">9、积分【积分商城】免费进行免费兑换物品哦</div>
     </div>
     <div
       class="challenge-button"
       hover-class="button-hover"
       @click="beginChallenge"
-      :class="{'disabled': parseInt(userInfo.surplusAnswerTimes) === 0}"
+      v-if="parseInt(userInfo.surplusAnswerTimes,10) > 0 && parseInt(userInfo.surplusHelpTimes,10) > 0"
+      :class="{'disabled': parseInt(userInfo.surplusAnswerTimes,10) === 0 && parseInt(userInfo.surplusHelpTimes,10) === 0}"
     >开始挑战</div>
+    <button
+      class="challenge-button"
+      hover-class="button-hover"
+      v-if="parseInt(userInfo.surplusAnswerTimes,10) === 0 && parseInt(userInfo.surplusHelpTimes,10) > 0"
+      open-type="share"
+    >请求好友帮助继续答题</button>
   </div>
 </template>
 
@@ -76,6 +83,7 @@ export default {
       this.userInfo = await this.$ajax.post("/api/user/getUserInfo", {
         userId: userId
       });
+      wx.setStorageSync("userInfo", JSON.stringify(this.userInfo));
     },
     /**
      * @description 开始挑战
@@ -101,18 +109,20 @@ export default {
    * @return {{path: string, success: success, title: string, error: error}}
    */
   onShareAppMessage: function() {
-    return {
+    let userInfo = JSON.parse(wx.getStorageSync("userInfo"));
+    let shareObj = {
       title:
         Math.random() > 0.5
           ? "万水千山总是情，朋友帮帮行不行。"
           : "朋友，帮我一下，我要免费兑礼品",
       path:
         "/pages/challenge/question/help?friendId=" +
-        this.userInfo.userId +
+        userInfo.userId +
         "&nickName=" +
-        this.userInfo.nickName,
-      imageUrl: "/static/pic.jpg"
+        userInfo.nickName,
+      imageUrl: "http://file.xmxui.com/pic.jpg"
     };
+    return shareObj;
   }
 };
 </script>

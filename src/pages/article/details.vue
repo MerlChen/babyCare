@@ -1,79 +1,48 @@
 <template>
   <div class="rpx" id="articleDetails">
     <!-- 授权弹窗 -->
-    <auth-dialog
-      v-if="showAuthDialog"
-      @change="refuseAuth"
-    >
-    </auth-dialog>
+    <auth-dialog v-if="showAuthDialog" @change="refuseAuth"></auth-dialog>
     <div class="article-main">
-      <div class="article-title">
-        {{ dataInfo.title }}
-      </div>
+      <div class="article-title">{{ dataInfo.title }}</div>
       <div class="article-auth-info">
-        <img
-          class="article-auth-logo"
-          src="./../../static/logo.png"
-        />
+        <img class="article-auth-logo" src="http://file.xmxui.com/logo.png" />
         <div class="article-auth-main">
-          <div class="article-auth-name">
-            {{ dataInfo.author ? dataInfo.author : '育婴宝库' }}
-          </div>
-          <div class="article-auth-time">
-            {{ dataInfo.createTime + ' 发表' }}
-          </div>
+          <div class="article-auth-name">{{ dataInfo.author ? dataInfo.author : '育婴宝库' }}</div>
+          <div class="article-auth-time">{{ dataInfo.createTime + ' 发表' }}</div>
         </div>
       </div>
-      <div
-        class="article-content"
-        v-html="dataInfo.content"
-      >
-      </div>
+      <div class="article-content" v-html="dataInfo.content"></div>
       <!-- 阅读数 -->
-      <div class="article-read-num">
-        {{ "阅读 " + dataInfo.viewsNum }}
-      </div>
+      <div class="article-read-num">{{ "阅读 " + dataInfo.viewsNum }}</div>
     </div>
     <!-- 文章评论 -->
     <div v-if="commentList.length > 0" class="article-comment">
       <!-- 标题 -->
-      <div class="article-comment-title">
-        精选留言
-      </div>
+      <div class="article-comment-title">精选留言</div>
       <!-- 评论列表 -->
       <div class="article-comment-list">
         <!-- 单条评论 -->
-        <div
-          v-for="item in commentList"
-          :key="item.id"
-          class="article-comment-item"
-        >
-          <img :src="item.avatarUrl" alt="" class="comment-item-user-header">
+        <div v-for="item in commentList" :key="item.id" class="article-comment-item">
+          <img :src="item.avatarUrl" alt class="comment-item-user-header" />
           <div class="comment-item-main">
             <!-- 用户信息 -->
             <div class="comment-item-header">
-              <div class="comment-item-nickname">
-                {{ item.nickName }}
-              </div>
+              <div class="comment-item-nickname">{{ item.nickName }}</div>
               <div
                 class="comment-item-like-info"
                 :class="{'liked' : item.liked }"
                 @click="toggleItemLike(item)"
               >
-                <img src="./../../static/article/like.png" alt="" v-if="!item.liked">
-                <img src="./../../static/article/liked.png" alt="" v-if="item.liked">
+                <img src="./../../static/article/like.png" alt v-if="!item.liked" />
+                <img src="./../../static/article/liked.png" alt v-if="item.liked" />
                 {{ item.likeNum ? item.likeNum : 0 }}
               </div>
             </div>
             <!-- 留言主体内容 -->
-            <div class="comment-item-content">
-              {{ item.content }}
-            </div>
+            <div class="comment-item-content">{{ item.content }}</div>
             <!-- 作者回复内容 -->
             <div class="comment-item-reply" v-if="item.reply && item.reply !== ''">
-              <span class="author">
-                作者回复：
-              </span>
+              <span class="author">作者回复：</span>
               {{ item.reply }}
             </div>
           </div>
@@ -82,7 +51,8 @@
     </div>
     <!-- 留言区域 -->
     <div class="article-comment-form login-tips" v-if="!userInfo.userId">
-      您还未登录，请先<span class="btn-login" @click="showAuthDialog = true">登录</span>
+      您还未登录，请先
+      <span class="btn-login" @click="showAuthDialog = true">登录</span>
     </div>
     <div
       class="article-comment-form"
@@ -101,25 +71,21 @@
           placeholder="留言经筛选后对所有人可见"
           @focus="focusInput"
           @blur="blurInput"
-        >
+        />
         <div
           v-if="inputFocus || messageSend"
           @click="sendComment"
           :class="{'disabled': commentInfo.content.length === 0 || commentInfo.content.trim() === '' || messageSend}"
           class="send-message-btn"
-        >
-          {{ messageSend ? '提交中' : '提交'}}
-        </div>
+        >{{ messageSend ? '提交中' : '提交'}}</div>
       </div>
       <!-- 收藏和点赞数 -->
       <div class="article-basic" :class="{'hide': inputFocus || messageSend }">
         <!-- 收藏 -->
         <div class="article-basic-item" :class="{'in-fact': favorite}" @click="favoriteEvent">
-          <img src="./../../static/article/favorite.png" alt="" v-if="!favorite">
-          <img src="./../../static/article/favorited.png" alt="" v-if="favorite">
-          <div class="label">
-            {{ favorite ? "取消收藏" : "加入收藏" }}
-          </div>
+          <img src="http://file.xmxui.com/favorite.png" alt v-if="!favorite" />
+          <img src="http://file.xmxui.com/favorited.png" alt v-if="favorite" />
+          <div class="label">{{ favorite ? "取消收藏" : "加入收藏" }}</div>
         </div>
         <!-- 点赞数 -->
         <div
@@ -127,11 +93,9 @@
           :class="{'in-fact': dataInfo.liked}"
           @click="toggleArticleLike"
         >
-          <img src="./../../static/article/like.png" alt="" v-if="!dataInfo.liked">
-          <img src="./../../static/article/liked.png" alt="" v-if="dataInfo.liked">
-          <div class="label">
-            {{ "赞 " + (dataInfo.likedNum ? dataInfo.likedNum : 0) }}
-          </div>
+          <img src="http://file.xmxui.com/like.png" alt v-if="!dataInfo.liked" />
+          <img src="http://file.xmxui.com/liked.png" alt v-if="dataInfo.liked" />
+          <div class="label">{{ "赞 " + (dataInfo.likedNum ? dataInfo.likedNum : 0) }}</div>
         </div>
       </div>
     </div>
@@ -141,11 +105,11 @@
 </template>
 
 <script>
-import authDialog from './../../components/authDialog'
+import authDialog from "./../../components/authDialog";
 
 export default {
   name: "details",
-  components: {authDialog},
+  components: { authDialog },
   data() {
     return {
       // 文章信息
@@ -178,7 +142,7 @@ export default {
       userInfo: {},
       // 显示授权弹窗
       showAuthDialog: false
-    }
+    };
   },
   methods: {
     /**
@@ -186,35 +150,41 @@ export default {
      * @param commentInfo
      */
     async getArticleDetails(commentInfo) {
-      this.articleParams = commentInfo.id ? commentInfo : this.articleParams;
+      this.articleParams =
+        commentInfo && commentInfo.id ? commentInfo : this.articleParams;
       let params = {
         id: this.articleParams.id
+      };
+      if (this.userInfo && this.userInfo.userId) {
+        params.userId = this.userInfo.userId;
       }
-      if(this.userInfo && this.userInfo.userId){
-        params.userId = this.userInfo.userId
-      }
-      let result = await this.$ajax.post("/api/article/details", params)
+      let result = await this.$ajax.post("/api/article/details", params);
       let d = new Date(result.createTime);
       this.favorite = result.favorite;
-      result.createTime = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
-      result.content = result.content.replace(/\<img/gi, "<img class='content-img'")
+      result.createTime =
+        d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+      result.content = result.content.replace(
+        /\<img/gi,
+        "<img class='content-img'"
+      );
       result.autor = result.autor ? result.autor : "育婴宝库";
       this.dataInfo = result;
       this.getCommentList();
       uni.setNavigationBarTitle({
         title: result.title
-      })
+      });
     },
     /**
      * @description 触发收藏相关事件
      */
     favoriteEvent() {
-      this.favorite ? this.cancelFavorite() : this.favoriteArticle()
+      this.favorite ? this.cancelFavorite() : this.favoriteArticle();
     },
     /**
      * @description 收藏该文章
      */
     async favoriteArticle() {
+      uni.showLoading();
       let result = await this.$ajax.post("/api/favorite/add", {
         articleId: this.dataInfo.id,
         articleName: this.dataInfo.title,
@@ -223,40 +193,54 @@ export default {
         typeId: this.dataInfo.typeId,
         thumb: this.dataInfo.thumb,
         userId: wx.getStorageSync("userId")
-      })
+      });
       if (result) {
-        wx.showToast({
-          title: "收藏本文成功"
-        })
         this.favorite = true;
+        setTimeout(() => {
+          uni.hideLoading();
+          wx.showToast({
+            title: "收藏本文成功"
+          });
+        }, 1000);
       }
     },
     /**
      * @description 取消收藏
      */
     async cancelFavorite() {
+      uni.showLoading();
       let result = await this.$ajax.post("/api/favorite/delete", {
         articleId: this.dataInfo.id,
         userId: wx.getStorageSync("userId")
-      })
+      });
       if (result) {
-        wx.showToast({
-          title: "取消收藏成功"
-        })
         this.favorite = false;
+        setTimeout(() => {
+          uni.hideLoading();
+          wx.showToast({
+            title: "取消收藏成功"
+          });
+        }, 1000);
       }
     },
     /**
      * @description 获取评论列表
      */
     async getCommentList() {
+      uni.showLoading();
       let params = {
         id: this.dataInfo.id
-      }
+      };
       if (this.userInfo && this.userInfo.userId) {
-        params.userId = this.userInfo.userId
+        params.userId = this.userInfo.userId;
       }
-      this.commentList = await this.$ajax.post("/api/comment/getCommentList", params)
+      this.commentList = await this.$ajax.post(
+        "/api/comment/getCommentList",
+        params
+      );
+      setTimeout(() => {
+        uni.hideLoading();
+      }, 1000);
     },
     /**
      * @description 支持或取消某条留言
@@ -274,6 +258,7 @@ export default {
      * @param commentData
      */
     async likeCommentInfo(commentData) {
+      uni.showLoading();
       let result = await this.$ajax.post("/api/like/comment", {
         articleId: this.dataInfo.id,
         userId: this.userInfo.userId,
@@ -283,6 +268,12 @@ export default {
         commentData.likeNum += 1;
         commentData.liked = true;
         commentData.likeDataId = result.id;
+        setTimeout(() => {
+          uni.hideLoading();
+          uni.showToast({
+            title: "操作成功"
+          });
+        }, 1000);
       }
     },
     /**
@@ -290,13 +281,21 @@ export default {
      * @param commentData
      */
     async cancelLikeCommentInfo(commentData) {
+      uni.showLoading();
       let result = await this.$ajax.post("/api/like/commentCancel", {
         likeDataId: commentData.likeDataId,
         commentId: commentData.id
       });
       if (result) {
-        commentData.likeNum = commentData.likeNum > 1 ? commentData.likeNum -= 1 : 0;
+        commentData.likeNum =
+          commentData.likeNum > 1 ? (commentData.likeNum -= 1) : 0;
         commentData.liked = false;
+        setTimeout(() => {
+          uni.hideLoading();
+          uni.showToast({
+            title: "操作成功"
+          });
+        }, 1000);
       }
     },
     /**
@@ -305,7 +304,7 @@ export default {
     focusInput(e) {
       this.panelHeight = e.detail.height;
       this.inputFocus = true;
-      this.setScrollBottom()
+      this.setScrollBottom();
     },
     /**
      * @description 输入框失焦
@@ -313,19 +312,25 @@ export default {
     blurInput() {
       this.inputFocus = false;
       this.panelHeight = 0;
-      this.setScrollBottom()
+      this.setScrollBottom();
     },
     /**
      * @description 滚动界面到最底部
      */
     setScrollBottom() {
       let _this = this;
-      uni.createSelectorQuery().select('#articleDetails').boundingClientRect(function (rect) {
-        // 使页面滚动到底部
-        uni.pageScrollTo({
-          scrollTop: _this.inputFocus ? (rect.height + _this.panelHeight) : rect.height
+      uni
+        .createSelectorQuery()
+        .select("#articleDetails")
+        .boundingClientRect(function(rect) {
+          // 使页面滚动到底部
+          uni.pageScrollTo({
+            scrollTop: _this.inputFocus
+              ? rect.height + _this.panelHeight
+              : rect.height
+          });
         })
-      }).exec()
+        .exec();
     },
     /**
      * @description 订阅留言回复
@@ -337,26 +342,26 @@ export default {
       }
       _this.messageSend = true;
       wx.requestSubscribeMessage({
-        tmplIds: ['ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU'],
-        success: function (res) {
-          if (res['ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU'] === 'accept') {
+        tmplIds: ["ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU"],
+        success: function(res) {
+          if (res["ks1LgFs15g2vpX4WUGuhdYr7B-NwZ18dRA2OKzxlZCU"] === "accept") {
             wx.showToast({
               title: "将推送审核结果"
-            })
+            });
           }
         },
-        fail: function (err) {
+        fail: function(err) {
           wx.showToast({
             title: "不通知审核结果"
-          })
+          });
         },
-        complete: function () {
+        complete: function() {
           // 此处设置延时是为了告知用户是否会有结果推送
           setTimeout(() => {
-            _this.submitMessage()
-          }, 2000)
+            _this.submitMessage();
+          }, 1000);
         }
-      })
+      });
     },
     /**
      * @description 文章点赞/取消点赞
@@ -372,26 +377,57 @@ export default {
      * @description 取消文章点赞
      */
     async cancelArticleLike() {
+      wx.showToast({
+        icon: "loading",
+        mask: true
+      });
       let result = await this.$ajax.post("/api/like/articleCancel", {
         id: this.dataInfo.likeDataId,
         articleId: this.dataInfo.id
-      })
+      });
       if (result) {
-        this.dataInfo.liked = false;
-        this.dataInfo.likedNum = this.dataInfo.likedNum > 1 ? this.dataInfo.likedNum - 1 : 0;
+        setTimeout(() => {
+          wx.showToast({
+            title: "操作成功"
+          });
+          this.dataInfo.liked = false;
+          this.dataInfo.likedNum = parseInt(this.dataInfo.likedNum, 10) - 1;
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          wx.showToast({
+            title: "操作失败"
+          });
+        }, 1000);
       }
     },
     /**
      * @description 给文章点赞
      */
     async likeArticleInfo() {
+      wx.showToast({
+        icon: "loading",
+        mask: true
+      });
       let result = await this.$ajax.post("/api/like/article", {
         articleId: this.dataInfo.id,
         userId: this.userInfo.userId
-      })
+      });
       if (result) {
-        this.dataInfo.liked = true;
-        this.dataInfo.likedNum += 1;
+        setTimeout(() => {
+          wx.showToast({
+            title: "操作成功"
+          });
+          this.dataInfo.liked = true;
+          this.dataInfo.likeDataId = result.id;
+          this.dataInfo.likedNum = parseInt(this.dataInfo.likedNum, 10) + 1;
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          wx.showToast({
+            title: "操作失败"
+          });
+        }, 1000);
       }
     },
     /**
@@ -405,36 +441,48 @@ export default {
       _this.commentInfo.openId = _this.userInfo.openId;
       _this.commentInfo.articleId = _this.dataInfo.id;
       _this.commentInfo.articleName = _this.dataInfo.title;
-      if (_this.commentInfo.content && _this.commentInfo.content.trim() !== "") {
-        let result = await _this.$ajax.post("/api/comment/add", _this.commentInfo)
+      if (
+        _this.commentInfo.content &&
+        _this.commentInfo.content.trim() !== ""
+      ) {
+        uni.showLoading();
+        let result = await _this.$ajax.post(
+          "/api/comment/add",
+          _this.commentInfo
+        );
         if (result) {
-          wx.showToast({
-            title: "留言成功"
-          })
+          setTimeout(() => {
+            uni.hideLoading();
+            uni.showToast({
+              title: "操作成功"
+            });
+          }, 1000);
           _this.messageSend = false;
-          _this.commentInfo.content = ""
-          _this.blurInput()
+          _this.commentInfo.content = "";
+          _this.blurInput();
         } else {
           wx.showModal({
             title: "留言提交失败",
             showCancel: false
-          })
+          });
         }
       } else {
-        console.error("消息数据有问题")
+        console.error("消息数据有问题");
       }
     },
     /**
      * @description 用户拒绝授权
      */
-    refuseAuth(res){
-      if(res === "success"){
-        this.userInfo = wx.getStorageSync("userInfo") ? JSON.parse(wx.getStorageSync("userInfo")) : null;
+    refuseAuth(res) {
+      if (res === "success") {
+        this.userInfo = wx.getStorageSync("userInfo")
+          ? JSON.parse(wx.getStorageSync("userInfo"))
+          : null;
         this.getArticleDetails();
       } else {
         wx.showToast({
           title: "您已拒绝授权"
-        })
+        });
         this.showAuthDialog = false;
       }
     }
@@ -442,11 +490,13 @@ export default {
   /**
    * @description 初始化读取文章数据信息
    */
-  onLoad: function (options) {
-    this.userInfo = wx.getStorageSync("userInfo") ? JSON.parse(wx.getStorageSync("userInfo")) : null;
+  onLoad: function(options) {
+    this.userInfo = wx.getStorageSync("userInfo")
+      ? JSON.parse(wx.getStorageSync("userInfo"))
+      : null;
     uni.setNavigationBarTitle({
       title: options.name
-    })
+    });
     this.getArticleDetails(options);
   },
   /**
@@ -468,272 +518,283 @@ export default {
       imageUrl: this.dataInfo.thumb
     };
   }
-}
+};
 </script>
 
 <style lang="scss">
-  .rpx {
-    .article-main {
-      background-color: #ffffff;
-      padding: 35rpx 30rpx 35rpx;
+.rpx {
+  .article-main {
+    background-color: #ffffff;
+    padding: 35rpx 30rpx 35rpx;
 
-      .article-title {
-        font-size: 32rpx;
-        line-height: 40rpx;
-        font-weight: bold;
-        color: #333333;
+    .article-title {
+      font-size: 32rpx;
+      line-height: 40rpx;
+      font-weight: bold;
+      color: #333333;
+    }
+
+    .article-auth-info {
+      width: 100%;
+      padding-top: 60rpx;
+      display: flex;
+      padding-bottom: 36rpx;
+      justify-content: flex-start;
+      border-bottom: 2rpx solid #e8e8e8;
+
+      .article-auth-logo {
+        margin-right: 16rpx;
+        width: 60rpx;
+        height: 60rpx;
+        border-radius: 4rpx 4rpx 4rpx;
       }
 
-      .article-auth-info {
-        width: 100%;
-        padding-top: 60rpx;
-        display: flex;
-        padding-bottom: 36rpx;
-        justify-content: flex-start;
-        border-bottom: 2rpx solid #E8E8E8;
+      .article-auth-main {
+        color: #848484;
 
-        .article-auth-logo {
-          margin-right: 16rpx;
+        .article-auth-name {
+          width: 100%;
+          font-size: 28rpx;
+          line-height: 28rpx;
+          margin-bottom: 8rpx;
+        }
+
+        .article-auth-time {
+          font-size: 24rpx;
+          line-height: 24rpx;
+        }
+      }
+    }
+
+    .article-content {
+      width: 690rpx;
+      padding: 30rpx 0 24rpx;
+      color: #333333;
+
+      .content-img {
+        width: 100% !important;
+      }
+      .blockquote {
+        display: block;
+        border-left: 8rpx solid #ee7ba6;
+        padding: 20rpx 10rpx;
+        margin: 10rpx 0;
+        line-height: 34rpx;
+        font-size: 28rpx;
+        color: #666666;
+        font-weight: bold;
+        background-color: #f1f1f1;
+      }
+    }
+
+    .article-read-num {
+      padding-top: 70rpx;
+      font-size: 24rpx;
+      color: #848484;
+    }
+  }
+
+  .article-comment {
+    margin-top: 20rpx;
+    background-color: #ffffff;
+    padding: 30rpx 30rpx 50rpx;
+
+    .article-comment-title {
+      font-size: 28rpx;
+      line-height: 28rpx;
+      color: #848484;
+      font-weight: 500;
+    }
+
+    .article-comment-list {
+      .article-comment-item {
+        display: flex;
+        margin-top: 60rpx;
+        justify-content: flex-start;
+
+        .comment-item-user-header {
           width: 60rpx;
           height: 60rpx;
+          margin-right: 20rpx;
           border-radius: 4rpx 4rpx 4rpx;
         }
 
-        .article-auth-main {
-          color: #848484;
+        .comment-item-main {
+          width: calc(100% - 80rpx);
 
-          .article-auth-name {
-            width: 100%;
-            font-size: 28rpx;
-            line-height: 28rpx;
-            margin-bottom: 8rpx;
-          }
+          .comment-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16rpx;
 
-          .article-auth-time {
-            font-size: 24rpx;
-            line-height: 24rpx;
-          }
-        }
-      }
-
-      .article-content {
-        width: 690rpx;
-        padding: 30rpx 0 24rpx;
-        color: #333333;
-
-        .content-img {
-          width: 100% !important;
-        }
-      }
-
-      .article-read-num {
-        padding-top: 70rpx;
-        font-size: 24rpx;
-        color: #848484;
-      }
-    }
-
-    .article-comment {
-      margin-top: 20rpx;
-      background-color: #ffffff;
-      padding: 30rpx 30rpx 50rpx;
-
-      .article-comment-title {
-        font-size: 28rpx;
-        line-height: 28rpx;
-        color: #848484;
-        font-weight: 500;
-      }
-
-      .article-comment-list {
-        .article-comment-item {
-          display: flex;
-          margin-top: 60rpx;
-          justify-content: flex-start;
-
-          .comment-item-user-header {
-            width: 60rpx;
-            height: 60rpx;
-            margin-right: 20rpx;
-            border-radius: 4rpx 4rpx 4rpx;
-          }
-
-          .comment-item-main {
-            width: calc(100% - 80rpx);
-
-            .comment-item-header {
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 16rpx;
-
-              .comment-item-nickname {
-                font-size: 28rpx;
-                line-height: 28rpx;
-                color: #848484;
-                font-weight: 500;
-              }
-
-              .comment-item-like-info {
-                display: flex;
-                color: #999999;
-                font-size: 24rpx;
-                line-height: 28rpx;
-                justify-content: flex-start;
-
-                img {
-                  width: 28rpx;
-                  height: 28rpx;
-                  margin-right: 10rpx;
-                }
-
-                &.liked {
-                  color: #EE7BA6;
-                }
-              }
-            }
-
-            .comment-item-content {
+            .comment-item-nickname {
               font-size: 28rpx;
-              line-height: 34rpx;
+              line-height: 28rpx;
+              color: #848484;
+              font-weight: 500;
             }
 
-            .comment-item-reply {
-              color: #333333;
-              font-size: 26rpx;
-              margin-top: 12rpx;
-              line-height: 34rpx;
-              background-color: #F3F3F3;
-              padding: 16rpx 16rpx 16rpx;
-              border-radius: 4rpx 4rpx 4rpx;
+            .comment-item-like-info {
+              display: flex;
+              color: #999999;
+              font-size: 24rpx;
+              line-height: 28rpx;
+              justify-content: flex-start;
 
-              .author {
-                color: #848484;
+              img {
+                width: 28rpx;
+                height: 28rpx;
+                margin-right: 10rpx;
+              }
+
+              &.liked {
+                color: #ee7ba6;
               }
             }
           }
-        }
-      }
-    }
 
-    .article-comment-form {
-      width: calc(100% - 40rpx);
-      height: 60rpx;
-      padding: 20rpx 20rpx;
-      background-color: #ffffff;
-      border-top: 2rpx solid #E8E8E8;
-      position: relative;
-      display: flex;
-      justify-content: flex-start;
-
-      .article-comment-container {
-        width: 500rpx;
-        display: flex;
-        position: relative;
-        justify-content: flex-start;
-
-        input {
-          width: 100%;
-          font-size: 26rpx;
-          line-height: 32rpx;
-          height: 32rpx;
-          min-height: 32rpx;
-          padding: 14rpx 25rpx;
-          background-color: #F7F7F7;
-          border: 2rpx solid #C7C7C7;
-          border-radius: 36rpx 36rpx 36rpx;
-        }
-
-        &.show {
-          width: 710rpx;
-
-          input {
-            width: 580rpx;
-            margin-right: 20rpx;
+          .comment-item-content {
+            font-size: 28rpx;
+            line-height: 34rpx;
           }
 
-          .send-message-btn {
-            width: 110rpx;
-            font-size: 24rpx;
-            text-align: center;
-            line-height: 60rpx;
-            color: #FFFFFF;
-            height: 60rpx;
-            background-color: #EE7BA6;
-            border-radius: 30rpx 30rpx 30rpx;
+          .comment-item-reply {
+            color: #333333;
+            font-size: 26rpx;
+            margin-top: 12rpx;
+            line-height: 34rpx;
+            background-color: #f3f3f3;
+            padding: 16rpx 16rpx 16rpx;
+            border-radius: 4rpx 4rpx 4rpx;
 
-            &.disabled {
-              opacity: 0.5;
+            .author {
+              color: #848484;
             }
           }
         }
       }
-
-      .article-basic {
-        opacity: 1;
-        width: 210rpx;
-        height: 60rpx;
-
-        .article-basic-item {
-          display: inline-block;
-          width: 105rpx;
-          height: 60rpx;
-          text-align: center;
-
-          img {
-            width: 28rpx;
-            height: 28rpx;
-            margin: 0 34rpx 10rpx 33rpx;
-            float: left;
-          }
-
-          .label {
-            width: 100%;
-            float: left;
-            color: #848484;
-            font-size: 22rpx;
-            line-height: 22rpx;
-          }
-
-          &.in-fact {
-            .label {
-              color: #EE7BA6;
-            }
-          }
-        }
-
-        &.hide {
-          width: 0;
-          opacity: 0;
-        }
-      }
-
-      &.focusInput {
-        position: fixed;
-        z-index: 2;
-        left: 0;
-        width: 100%;
-      }
-
-      &.login-tips {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        color: #999999;
-        padding: 50rpx 0 50rpx;
-
-        .btn-login {
-          color: #EE7BA6;
-        }
-      }
-    }
-
-    .mask {
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      position: fixed;
-      top: 0;
-      left: 0;
     }
   }
+
+  .article-comment-form {
+    width: calc(100% - 40rpx);
+    height: 60rpx;
+    padding: 20rpx 20rpx;
+    background-color: #ffffff;
+    border-top: 2rpx solid #e8e8e8;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+
+    .article-comment-container {
+      width: 500rpx;
+      display: flex;
+      position: relative;
+      justify-content: flex-start;
+
+      input {
+        width: 100%;
+        font-size: 26rpx;
+        line-height: 32rpx;
+        height: 32rpx;
+        min-height: 32rpx;
+        padding: 14rpx 25rpx;
+        background-color: #f7f7f7;
+        border: 2rpx solid #c7c7c7;
+        border-radius: 36rpx 36rpx 36rpx;
+      }
+
+      &.show {
+        width: 710rpx;
+
+        input {
+          width: 580rpx;
+          margin-right: 20rpx;
+        }
+
+        .send-message-btn {
+          width: 110rpx;
+          font-size: 24rpx;
+          text-align: center;
+          line-height: 60rpx;
+          color: #ffffff;
+          height: 60rpx;
+          background-color: #ee7ba6;
+          border-radius: 30rpx 30rpx 30rpx;
+
+          &.disabled {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+
+    .article-basic {
+      opacity: 1;
+      width: 210rpx;
+      height: 60rpx;
+
+      .article-basic-item {
+        display: inline-block;
+        width: 105rpx;
+        height: 60rpx;
+        text-align: center;
+
+        img {
+          width: 28rpx;
+          height: 28rpx;
+          margin: 0 34rpx 10rpx 33rpx;
+          float: left;
+        }
+
+        .label {
+          width: 100%;
+          float: left;
+          color: #848484;
+          font-size: 22rpx;
+          line-height: 22rpx;
+        }
+
+        &.in-fact {
+          .label {
+            color: #ee7ba6;
+          }
+        }
+      }
+
+      &.hide {
+        width: 0;
+        opacity: 0;
+      }
+    }
+
+    &.focusInput {
+      position: fixed;
+      z-index: 2;
+      left: 0;
+      width: 100%;
+    }
+
+    &.login-tips {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      color: #999999;
+      padding: 50rpx 0 50rpx;
+
+      .btn-login {
+        color: #ee7ba6;
+      }
+    }
+  }
+
+  .mask {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+}
 </style>

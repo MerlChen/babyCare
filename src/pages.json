@@ -102,6 +102,54 @@
       "style": {
         "navigationBarTitleText": "成长轨迹"
       }
+    },
+    {
+      "path": "pages/personal/pointsMall/index",
+      "style": {
+        "navigationBarTitleText": "积分商城"
+      }
+    },
+    {
+      "path": "pages/personal/pointsMall/details",
+      "style": {
+        "navigationBarTitleText": "商品详情"
+      }
+    },
+    {
+      "path": "pages/personal/address/index",
+      "style": {
+        "navigationBarTitleText": "地址管理"
+      }
+    },
+    {
+      "path": "pages/personal/address/add",
+      "style": {
+        "navigationBarTitleText": "新增收货地址"
+      }
+    },
+    {
+      "path": "pages/personal/address/edit",
+      "style": {
+        "navigationBarTitleText": "编辑收货地址"
+      }
+    },
+    {
+      "path": "pages/personal/myOrder/toOrder",
+      "style": {
+        "navigationBarTitleText": "确认订单"
+      }
+    },
+    {
+      "path": "pages/personal/myOrder/index",
+      "style": {
+        "navigationBarTitleText": "我的订单"
+      }
+    },
+    {
+      "path": "pages/personal/about/index",
+      "style": {
+        "navigationBarTitleText": "关于【育婴宝库】"
+      }
     }
   ],
   "globalStyle": {

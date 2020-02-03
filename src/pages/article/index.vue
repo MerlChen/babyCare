@@ -1,8 +1,8 @@
 <!--
  * @Author: Louis
  * @Date: 2019-10-25 09:25:21
- * @LastEditors: Louis
- * @LastEditTime: 2019-10-29 09:46:22
+ * @LastEditors  : Louis
+ * @LastEditTime : 2020-02-02 21:33:15
  * @Description:文章列表界面
  -->
 <template>
@@ -77,8 +77,9 @@ export default {
     };
   },
   onLoad() {
+    wx.showTabBar();
     this.$nextTick(() => {
-      this.getArticleList();
+      uni.showLoading();
       this.getArticleType()
     });
   },
@@ -90,7 +91,20 @@ export default {
       if (this.tabList.length > 0) {
         return
       }
-      this.tabList = await this.$ajax.post("/api/articleType/list");
+      let result = await this.$ajax.post("/api/articleType/list");
+      if(result && !result.engine){
+        this.tabList = result;
+      this.getArticleList();
+      } else{
+        uni.showModal({
+          content:"网络好像出了问题，是否重试",
+          success:(res)=>{
+            if(res.confirm){
+              this.getArticleType();
+            }
+          }
+        })
+      }
     },
     /**
      * @description 获取文章列表
@@ -104,11 +118,21 @@ export default {
         pageNo: 1
       })
       if (result) {
+        uni.hideLoading();
         result.data.map(item => {
           let d = new Date(item.createTime)
           item.dateInfo = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate()
         })
         this.list = result.data || []
+      } else{
+        uni.showModal({
+          content:"网络好像出了问题，是否重试",
+          success:(res)=>{
+            if(res.confirm){
+              this.getArticleType();
+            }
+          }
+        })
       }
     },
     /**
@@ -138,7 +162,7 @@ export default {
     return {
       title: "育婴宝库-专注传播科学育儿知识",
       url: "/pages/article/index",
-      imageUrl: "/static/pic.jpg"
+      imageUrl: "http://file.xmxui.com/pic.jpg"
     };
   }
 };

@@ -86,9 +86,11 @@ function levelPercentCount(score) {
  * @return {*}
  */
 function ageDiffCount(birthDay) {
-  let b = new Date(birthDay).getTime()
+  let bDateInfo = birthDay.split('-');
+  let bDate = bDateInfo[0] + '/' + bDateInfo[1] + '/' + bDateInfo[2]
+  let b = new Date(bDate).getTime();
   let d = new Date().getTime()
-  let diff = (d - b) / 24 / 60 / 60 / 1000
+  let diff = (d - b) / 24 / 60 / 60 / 1000;
   let result = null
   // 小于一个月龄
   if (diff > 0) {
@@ -146,10 +148,20 @@ function bestAgeMatch(ageArr, birthDay) {
   return monthNum
 }
 
+/**
+ * @description 更改订单状态文本
+ * @param {} status 
+ */
+function statusChange(status) {
+  let statusArr = ["待确认", "已确认", "待发货", "已发货", "已完成", "已取消"];
+  return statusArr[status - 1]
+}
+
 export {
   levelCount,
   nextLevelCount,
   levelPercentCount,
   ageDiffCount,
-  bestAgeMatch
+  bestAgeMatch,
+  statusChange
 }

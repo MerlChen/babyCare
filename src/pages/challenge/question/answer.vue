@@ -1,12 +1,8 @@
 <template>
   <div class="answer-page">
-    <div class="question-title">
-      {{ 'Q-' + parseInt(index + 1) + '：' + list[index].name }}
-    </div>
+    <div class="question-title">{{ 'Q-' + parseInt(index + 1) + '：' + list[index].name }}</div>
     <div class="answer-list">
-      <div class="title">
-        请选择：
-      </div>
+      <div class="title">请选择：</div>
       <div
         class="answer-item"
         :class="{
@@ -17,15 +13,16 @@
       >
         <img
           src="@/static/challenge/error.png"
-          alt=""
+          alt
           class="answer-item-result"
-          v-if="needWait && answer !== list[index].answer && answer === 'optionA'">
+          v-if="needWait && answer !== list[index].answer && answer === 'optionA'"
+        />
         <img
           src="@/static/challenge/right.png"
-          alt=""
+          alt
           class="answer-item-result"
           v-if="needWait && answer === list[index].answer && answer === 'optionA'"
-        >
+        />
         {{ list[index].optionA }}
       </div>
       <div
@@ -38,15 +35,16 @@
       >
         <img
           src="@/static/challenge/error.png"
-          alt=""
+          alt
           class="answer-item-result"
-          v-if="needWait && answer !== list[index].answer && answer === 'optionB'">
+          v-if="needWait && answer !== list[index].answer && answer === 'optionB'"
+        />
         <img
           src="@/static/challenge/right.png"
-          alt=""
+          alt
           class="answer-item-result"
           v-if="needWait && answer === list[index].answer && answer === 'optionB'"
-        >
+        />
         {{ list[index].optionB }}
       </div>
       <div
@@ -59,15 +57,16 @@
       >
         <img
           src="@/static/challenge/error.png"
-          alt=""
+          alt
           class="answer-item-result"
-          v-if="needWait && answer !== list[index].answer && answer === 'optionC'">
+          v-if="needWait && answer !== list[index].answer && answer === 'optionC'"
+        />
         <img
           src="@/static/challenge/right.png"
-          alt=""
+          alt
           class="answer-item-result"
           v-if="needWait && answer === list[index].answer && answer === 'optionC'"
-        >
+        />
         {{ list[index].optionC }}
       </div>
       <div
@@ -80,15 +79,16 @@
       >
         <img
           src="@/static/challenge/error.png"
-          alt=""
+          alt
           class="answer-item-result"
-          v-if="needWait && answer !== list[index].answer && answer === 'optionD'">
+          v-if="needWait && answer !== list[index].answer && answer === 'optionD'"
+        />
         <img
           src="@/static/challenge/right.png"
-          alt=""
+          alt
           class="answer-item-result"
           v-if="needWait && answer === list[index].answer && answer === 'optionD'"
-        >
+        />
         {{ list[index].optionD }}
       </div>
       <div
@@ -101,15 +101,16 @@
       >
         <img
           src="@/static/challenge/error.png"
-          alt=""
+          alt
           class="answer-item-result"
-          v-if="needWait && answer !== list[index].answer && answer === 'optionOne'">
+          v-if="needWait && answer !== list[index].answer && answer === 'optionOne'"
+        />
         <img
           src="@/static/challenge/right.png"
-          alt=""
+          alt
           class="answer-item-result"
           v-if="needWait && answer === list[index].answer && answer === 'optionOne'"
-        >
+        />
         {{ list[index].optionOne }}
       </div>
       <div
@@ -122,51 +123,51 @@
       >
         <img
           src="@/static/challenge/error.png"
-          alt=""
+          alt
           class="answer-item-result"
-          v-if="needWait && answer !== list[index].answer && answer === 'optionTwo'">
+          v-if="needWait && answer !== list[index].answer && answer === 'optionTwo'"
+        />
         <img
           src="@/static/challenge/right.png"
-          alt=""
+          alt
           class="answer-item-result"
           v-if="needWait && answer === list[index].answer && answer === 'optionTwo'"
-        >
+        />
         {{ list[index].optionTwo }}
       </div>
-      <div class="error-tips" v-if="answer !== list[index].answer && needWait">
-        {{ list[index].errorTips ? list[index].errorTips : '' }}
-      </div>
+      <div
+        class="error-tips"
+        v-if="answer !== list[index].answer && needWait"
+      >{{ list[index].errorTips ? list[index].errorTips : '' }}</div>
       <div
         class="next-button"
         v-if="index < 9 && needWait && list[index].answer === answer"
         @click="changeQuestion"
         hover-class="button-hover"
-      >
-        下一题
-      </div>
+      >下一题</div>
       <div
         class="next-button"
         v-if="index === 9 && needWait"
         @click="backToQuestion"
         hover-class="button-hover"
-      >
-        完成挑战
-      </div>
+      >完成挑战</div>
       <div
         class="question-tips"
         v-if="needWait && list[index].tips"
         hover-class="button-hover"
-      >
-        解答：{{ list[index].tips }}
-      </div>
+      >解答：{{ list[index].tips }}</div>
       <div
         class="next-button"
-        v-if="answer !== list[index].answer && needWait"
+        v-if="answer !== list[index].answer && needWait && parseInt(userInfo.surplusAnswerTimes,10) > 1"
         @click="reChallenge"
         hover-class="button-hover"
-      >
-        重新挑战
-      </div>
+      >重新挑战</div>
+      <button
+        class="next-button"
+        v-if="needWait  && parseInt(userInfo.surplusAnswerTimes,10) === 1 && answer !== list[index].answer"
+        hover-class="button-hover"
+        open-type="share"
+      >请求好友帮助</button>
     </div>
   </div>
 </template>
@@ -179,11 +180,12 @@ export default {
       list: [],
       index: 0,
       needWait: false,
-      answer: false
-    }
+      answer: false,
+      userInfo: {}
+    };
   },
   mounted() {
-    this.getQuestionList()
+    this.getQuestionList();
   },
   methods: {
     /**
@@ -192,12 +194,23 @@ export default {
      */
     async getQuestionList() {
       uni.showLoading();
-      this.list = await this.$ajax.post("/api/question/list", {
+      let result = await this.$ajax.post("/api/question/list", {
         pageSize: 10,
         pageNo: 1,
-        userId: wx.getStorageSync("userId")
+        userId: this.userInfo.userId
       });
-      uni.hideLoading()
+      uni.hideLoading();
+      if (result) {
+        this.list = result;
+      } else {
+        uni.showModal({
+          content: "您已无答题次数，请分享至好友，进行答题助力",
+          showCancel: false,
+          success: () => {
+            uni.reLaunch({ url: "/pages/challenge/question/index" });
+          }
+        });
+      }
     },
     /**
      * @description 检查选项是否就是答案
@@ -205,7 +218,7 @@ export default {
      */
     checkAnswer(answerData) {
       if (this.needWait) {
-        return
+        return;
       }
       this.needWait = true;
       this.answer = answerData;
@@ -233,15 +246,25 @@ export default {
       this.index = 0;
       this.answer = null;
       this.needWait = false;
-      this.getQuestionList()
+      if (parseInt(this.userInfo.surplusAnswerTimes) === 1) {
+        uni.showModal({
+          conent: "您已无答题次数，请分享至好友进行助力",
+          showCancel: false,
+          success: () => {
+            uni.reLaunch({
+              url: "/pages/challenge/question/index"
+            });
+          }
+        });
+      }
+      this.getQuestionList();
     },
     /**
      * @description 答题完成提交分数
      */
     async submitScore(fullRight) {
-      let userId = wx.getStorageSync("userId");
       await this.$ajax.post("/api/question/submit", {
-        userId: userId,
+        userId: this.userInfo.userId,
         score: fullRight ? 10 : this.index
       });
     },
@@ -249,94 +272,120 @@ export default {
      * @description 答题完成，返回答题主界面
      */
     backToQuestion() {
-      uni.redirectTo({url: "/pages/challenge/question/index"})
+      uni.redirectTo({ url: "/pages/challenge/question/index" });
     }
+  },
+  onLoad() {
+    this.userInfo = JSON.parse(wx.getStorageSync("userInfo"));
+  },
+  /**
+   * @description 触发微信分享
+   * @return {{path: string, success: success, title: string, error: error}}
+   */
+  onShareAppMessage: function() {
+    let shareObj = {
+      title:
+        Math.random() > 0.5
+          ? "万水千山总是情，朋友帮帮行不行。"
+          : "朋友，帮我一下，我要免费兑礼品",
+      path:
+        "/pages/challenge/question/help?friendId=" +
+        this.userInfo.userId +
+        "&nickName=" +
+        this.userInfo.nickName,
+      imageUrl: "http://file.xmxui.com/pic.jpg",
+      success: () => {}
+    };
+    return shareObj;
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-  .answer-page {
-    background-color: #FFFFFF;
-    min-height: 100%;
-    padding: 40rpx 0 40rpx;
+.answer-page {
+  background-color: #ffffff;
+  min-height: 100%;
+  padding: 40rpx 0 40rpx;
 
-    .question-title {
-      font-size: 30rpx;
-      color: #EE86AD;
-      line-height: 35rpx;
-      padding: 0 40rpx 40rpx;
-      border-bottom: 2rpx solid #E8E8E8;
+  .question-title {
+    font-size: 30rpx;
+    color: #ee86ad;
+    line-height: 35rpx;
+    padding: 0 40rpx 40rpx;
+    border-bottom: 2rpx solid #e8e8e8;
+  }
+
+  .answer-list {
+    padding: 40rpx 40rpx 40rpx;
+
+    .title {
+      font-size: 28rpx;
+      font-weight: bold;
+      color: #333333;
     }
 
-    .answer-list {
-      padding: 40rpx 40rpx 40rpx;
+    .answer-item {
+      width: calc(100% - 80rpx);
+      padding: 20rpx 20rpx 20rpx 60rpx;
+      line-height: 30rpx;
+      border-radius: 30rpx 30rpx 30rpx;
+      margin: 40rpx auto;
+      background-color: #ee86ad;
+      color: #ffffff;
+      font-size: 24rpx;
+      text-align: left;
+      position: relative;
 
-      .title {
-        font-size: 28rpx;
-        font-weight: bold;
-        color: #333333;
+      .answer-item-result {
+        width: 30rpx;
+        height: 30rpx;
+        position: absolute;
+        top: 20rpx;
+        left: 20rpx;
       }
 
-      .answer-item {
-        width: calc(100% - 80rpx);
-        padding: 20rpx 20rpx 20rpx 60rpx;
-        line-height: 30rpx;
-        border-radius: 30rpx 30rpx 30rpx;
-        margin: 40rpx auto;
-        background-color: #EE86AD;
-        color: #FFFFFF;
-        font-size: 24rpx;
-        text-align: left;
-        position: relative;
-
-        .answer-item-result {
-          width: 30rpx;
-          height: 30rpx;
-          position: absolute;
-          top: 20rpx;
-          left: 20rpx;
-        }
-
-        &.is-right {
-          background-color: #9dd98a;
-        }
-
+      &.is-right {
+        background-color: #9dd98a;
       }
+    }
 
-      .error-tips {
-        font-size: 24rpx;
-        line-height: 30rpx;
-        color: #666666;
-      }
+    .error-tips {
+      font-size: 24rpx;
+      line-height: 30rpx;
+      color: #666666;
+    }
 
-      .next-button {
-        width: 670rpx;
-        height: 90rpx;
-        background: linear-gradient(94deg, rgba(238, 123, 166, 1), rgba(240, 149, 183, 1));
-        border-radius: 45rpx;
-        color: #FFFFFF;
-        font-size: 34rpx;
-        text-align: center;
-        line-height: 90rpx;
-        margin: 60rpx 0 40rpx;
-        box-shadow: 2px 2px 2px #F095B7;
-      }
+    .next-button {
+      width: 670rpx;
+      height: 90rpx;
+      background: linear-gradient(
+        94deg,
+        rgba(238, 123, 166, 1),
+        rgba(240, 149, 183, 1)
+      );
+      border-radius: 45rpx;
+      color: #ffffff;
+      font-size: 34rpx;
+      text-align: center;
+      line-height: 90rpx;
+      margin: 60rpx 0 40rpx;
+      box-shadow: 2px 2px 2px #f095b7;
+    }
 
-      .question-tips {
-        display: block;
-        border-left: 8px solid #EE86AD;
-        padding: 5px 10px;
-        margin: 10px 0;
-        line-height: 1.4;
-        font-size: 100%;
-        background-color: #f1f1f1;
-      }
+    .question-tips {
+      display: block;
+      border-left: 8px solid #ee86ad;
+      padding: 5px 10px;
+      margin: 10px 0;
+      line-height: 1.4;
+      font-size: 100%;
+      background-color: #f1f1f1;
+    }
 
-      .button-hover {
-        background: #E8E8E8;
-        color: #ffffff;
-      }
+    .button-hover {
+      background: #e8e8e8;
+      color: #ffffff;
     }
   }
+}
 </style>

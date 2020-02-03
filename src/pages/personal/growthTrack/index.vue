@@ -1,29 +1,18 @@
 <!--
  * @Author: Louis
- * @Date: 2019-10-25 09:25:21
- * @LastEditors: Louis
- * @LastEditTime: 2019-10-29 09:57:27
- * @Description:身高体重曲线图
+ * @Date: 2020-01-02 19:18:14
+ * @LastEditors  : Louis
+ * @LastEditTime : 2020-02-01 15:42:30
  -->
 <template>
   <div class="personal-charts">
-    <canvas
-      canvas-id="heightCanvas"
-      disable-scroll="true"
-      class="heightCanvas canvas"
-    >
-    </canvas>
-    <canvas
-      canvas-id="weightCanvas"
-      disable-scroll="true"
-      class="weightCanvas canvas"
-    >
-    </canvas>
+    <canvas canvas-id="heightCanvas" disable-scroll="true" class="heightCanvas canvas"></canvas>
+    <canvas canvas-id="weightCanvas" disable-scroll="true" class="weightCanvas canvas"></canvas>
   </div>
 </template>
 
 <script>
-let wxCharts = require("../../../tools/wx-charts.min");
+// let wxCharts = require("../../../tools/wx-charts.min");
 let lineCharts = null;
 export default {
   name: "charts",
@@ -146,7 +135,7 @@ export default {
       title: "育婴宝库-快速查询、统计孩子的身高、体重",
       url: "/pages/article/index",
       desc: "查询并统计孩子的身高、体重发育趋势",
-      imageUrl: "/static/pic.jpg"
+      imageUrl: "http://file.xmxui.com/pic.jpg"
     };
   }
 };
