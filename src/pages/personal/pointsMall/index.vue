@@ -2,7 +2,7 @@
  * @Author: Louis
  * @Date: 2020-01-31 17:56:28
  * @LastEditors  : Louis
- * @LastEditTime : 2020-02-03 21:58:55
+ * @LastEditTime : 2020-02-06 18:28:13
  -->
 <template>
   <div class="points-mall">
@@ -21,6 +21,12 @@
         <div class="commodity-item-container">
           <div class="commodity-item-title">{{ item.name }}</div>
           <div class="commodity-item-point">{{ item.foldScoreNum + "积分" }}</div>
+        </div>
+        <div class="commodity-item-target" v-if="item.lessNum <= 5 && item.lessNum > 0">
+          <div class="commodity-item-target-container">{{ "仅剩 " + item.lessNum + " 件" }}</div>
+        </div>
+        <div class="commodity-item-target" v-if="item.lessNum === 0">
+          <div class="commodity-item-target-container">余货不足</div>
         </div>
       </div>
     </div>
@@ -63,9 +69,17 @@ export default {
      * @param itemData
      */
     showDetails(itemData) {
-      uni.navigateTo({
-        url: "/pages/personal/pointsMall/details?id=" + itemData.id
-      });
+      if (itemData.lessNum === 0) {
+        uni.showModal({
+          title: "余货不足",
+          content: "对不起，此商品已全部兑换完毕，我们将尽快补充货源。",
+          showCancel: false
+        });
+      } else {
+        uni.navigateTo({
+          url: "/pages/personal/pointsMall/details?id=" + itemData.id
+        });
+      }
     }
   },
   onShow() {
@@ -146,6 +160,39 @@ export default {
       margin-top: 30rpx;
       width: calc(calc(100% - 40rpx) / 2);
       background-color: #ffffff;
+      position: relative;
+      .commodity-item-target {
+        width: 130rpx;
+        height: 130rpx;
+        overflow: hidden;
+        position: absolute;
+        top: -3rpx;
+        left: -3rpx;
+
+        .commodity-item-target-container {
+          text-align: center;
+          text-shadow: rgba(95, 91, 91, 0.8) 0 2rpx 0;
+          -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+          position: relative;
+          padding: 7rpx 0;
+          right: 50rpx;
+          font-weight: bolder;
+          top: 20rpx;
+          width: 190rpx;
+          background-color: #ee7ba5d5;
+          background-image: -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            from(#ee7ba5d5),
+            to(#ee7ba6)
+          );
+          background-image: -webkit-linear-gradient(top, #ee7ba5d5, #ee7ba6);
+          color: #ffffff;
+          box-shadow: 0px 0px 3rpx rgba(0, 0, 0, 0.5);
+        }
+      }
       .commodity-item-img {
         width: 100%;
         height: 240rpx;

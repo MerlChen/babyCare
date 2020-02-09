@@ -3,7 +3,7 @@
  * @Date: 2020-01-31 19:09:32
  * @Email: huangxin1273@vip.qq.com
  * @LastEditors  : Louis
- * @LastEditTime : 2020-02-03 23:12:44
+ * @LastEditTime : 2020-02-06 18:01:40
  * @Description: 订单提交界面
  -->
 <template>
@@ -100,22 +100,23 @@ export default {
           content: "请选择收件地址信息",
           showCancel: false
         });
-        return;
-      }
-      let result = this.$ajax.post("/api/order/add", {
-        commodityId: this.params.id,
-        userId: this.userInfo.userId,
-        addressId: this.addressInfo.id
-      });
-      if (result && !result.engine) {
-        setTimeout(() => {
-          uni.showToast({
-            title: "兑换成功"
-          });
+        uni.hideLoading();
+      } else {
+        let result = this.$ajax.post("/api/order/add", {
+          commodityId: this.params.id,
+          userId: this.userInfo.userId,
+          addressId: this.addressInfo.id
+        });
+        if (result && !result.engine) {
           setTimeout(() => {
-            uni.reLaunch({ url: "/pages/personal/index" });
-          }, 2000);
-        }, 3000);
+            uni.showToast({
+              title: "兑换成功"
+            });
+            setTimeout(() => {
+              uni.reLaunch({ url: "/pages/personal/index" });
+            }, 2000);
+          }, 3000);
+        }
       }
     },
     /**

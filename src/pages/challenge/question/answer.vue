@@ -263,6 +263,9 @@ export default {
      * @description 答题完成提交分数
      */
     async submitScore(fullRight) {
+      if (this.index === 0) {
+        return;
+      }
       await this.$ajax.post("/api/question/submit", {
         userId: this.userInfo.userId,
         score: fullRight ? 10 : this.index
@@ -272,7 +275,7 @@ export default {
      * @description 答题完成，返回答题主界面
      */
     backToQuestion() {
-      uni.redirectTo({ url: "/pages/challenge/question/index" });
+      uni.reLaunch({ url: "/pages/challenge/question/index" });
     }
   },
   onLoad() {

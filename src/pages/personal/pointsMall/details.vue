@@ -3,7 +3,7 @@
  * @Date: 2020-02-03 21:33:56
  * @Email: huangxin1273@vip.qq.com
  * @LastEditors  : Louis
- * @LastEditTime : 2020-02-03 23:08:21
+ * @LastEditTime : 2020-02-06 18:33:49
  * @Description: 商品详情界面
  -->
 <template>
@@ -15,7 +15,12 @@
     </div>
     <div class="tool-bar">
       <div class="commodity-price">{{ dataInfo.foldScoreNum +"积分"}}</div>
-      <div hover-class="button-hover" class="change-button" @click="toOrder">兑换</div>
+      <div
+        hover-class="button-hover"
+        class="change-button"
+        :class="{'disabled':dataInfo.foldScoreNum > userInfo.usefulScore}"
+        @click="toOrder"
+      >{{ userInfo.usefulScore > dataInfo.foldScoreNum ? "兑换" : "积分不足"}}</div>
     </div>
   </div>
 </template>
@@ -30,7 +35,8 @@ export default {
         description: "",
         foldScoreNum: ""
       },
-      params: {}
+      params: {},
+      userInfo: {}
     };
   },
   methods: {
@@ -47,10 +53,20 @@ export default {
       }
     },
     toOrder() {
+      if (this.userInfo.usefulScore < this.dataInfo.foldScoreNum) {
+        uni.showModal({
+          content: "您的可用积分不足以兑换此商品，快去答题获取积分吧。",
+          showCancel: false
+        });
+        return;
+      }
       uni.navigateTo({
         url: "/pages/personal/myOrder/toOrder?id=" + this.params.id
       });
     }
+  },
+  onShow() {
+    this.userInfo = JSON.parse(wx.getStorageSync("userInfo"));
   },
   onLoad(params) {
     this.params = params;
@@ -127,6 +143,9 @@ export default {
       transition: 0.3s ease-in-out all;
       &.button-hover {
         opacity: 0.7;
+      }
+      &.disabled {
+        background: #d7dce6;
       }
     }
   }

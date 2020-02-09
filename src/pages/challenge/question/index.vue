@@ -65,9 +65,6 @@ export default {
       userInfo: {}
     };
   },
-  mounted() {
-    this.getUserInfo();
-  },
   methods: {
     // 等级计算
     levelCount,
@@ -123,6 +120,9 @@ export default {
       imageUrl: "http://file.xmxui.com/pic.jpg"
     };
     return shareObj;
+  },
+  onShow() {
+    this.getUserInfo();
   }
 };
 </script>

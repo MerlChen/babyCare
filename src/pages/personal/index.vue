@@ -2,7 +2,7 @@
  * @Author: Louis
  * @Date: 2019-10-25 09:25:21
  * @LastEditors  : Louis
- * @LastEditTime : 2020-02-03 23:13:10
+ * @LastEditTime : 2020-02-06 18:04:39
  * @Description: 增加菜单获取
  -->
 <template>
@@ -61,7 +61,6 @@
         <img src="@/static/right.png" class="personal-menu-right-icon" alt />
       </div>
     </div>
-    <div class="mark" v-if="loading">数据请求中，请稍后...</div>
   </div>
 </template>
 
@@ -86,8 +85,7 @@ export default {
         score: "0"
       },
       needAuth: true,
-      menuList: [],
-      loading: false
+      menuList: []
     };
   },
   /**
@@ -117,7 +115,6 @@ export default {
       this.$ajax.post("/api/user/getUserInfo", { userId: userId }).then(res => {
         if (res) {
           this.userInfo = res;
-          this.loading = false;
         }
       });
     },
@@ -135,18 +132,21 @@ export default {
     }
   },
   onLoad(params) {
-    this.loading = true;
-    this.getMenuList();
-    let userId = wx.getStorageSync("userId");
-    if (userId && userId !== "") {
-      this.getPersonalInfo();
-    }
     if (params && params.toBabyList) {
       this.needAuth = false;
       uni.navigateTo({ url: "/pages/personal/baby/index" });
     } else {
       this.needAuth = true;
       wx.showTabBar();
+    }
+  },
+  onShow() {
+    this.getMenuList();
+    let userInfo = wx.getStorageSync("userInfo")
+      ? JSON.parse(wx.getStorageSync("userInfo"))
+      : {};
+    if (userInfo && userInfo.userId) {
+      this.userInfo = userInfo;
     }
   }
 };

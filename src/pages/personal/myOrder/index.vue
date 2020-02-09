@@ -2,7 +2,7 @@
  * @Author: Louis
  * @Date: 2020-01-21 01:53:43
  * @LastEditors  : Louis
- * @LastEditTime : 2020-02-03 16:17:15
+ * @LastEditTime : 2020-02-06 18:35:05
  -->
 <template>
   <div class="my-order">
@@ -115,7 +115,7 @@ export default {
       }
     }
   },
-  mounted() {
+  onShow() {
     this.getOrderList();
   }
 };

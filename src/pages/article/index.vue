@@ -2,7 +2,7 @@
  * @Author: Louis
  * @Date: 2019-10-25 09:25:21
  * @LastEditors  : Louis
- * @LastEditTime : 2020-02-02 21:33:15
+ * @LastEditTime : 2020-02-06 18:08:42
  * @Description:文章列表界面
  -->
 <template>
@@ -63,10 +63,6 @@ export default {
   components: {
     authDialog
   },
-  watch: {
-    articleInfo(nVal) {
-    }
-  },
   data() {
     return {
       showAuth: false,
@@ -83,6 +79,9 @@ export default {
       this.getArticleType()
     });
   },
+  onShow(){
+    this.getArticleList();
+  },
   methods: {
     /**
      * @description 获取文章分类
@@ -94,7 +93,6 @@ export default {
       let result = await this.$ajax.post("/api/articleType/list");
       if(result && !result.engine){
         this.tabList = result;
-      this.getArticleList();
       } else{
         uni.showModal({
           content:"网络好像出了问题，是否重试",
@@ -117,7 +115,7 @@ export default {
         pageSize: 10,
         pageNo: 1
       })
-      if (result) {
+      if (result && !result.engine) {
         uni.hideLoading();
         result.data.map(item => {
           let d = new Date(item.createTime)
@@ -129,7 +127,7 @@ export default {
           content:"网络好像出了问题，是否重试",
           success:(res)=>{
             if(res.confirm){
-              this.getArticleType();
+              this.getArticleList();
             }
           }
         })
